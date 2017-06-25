@@ -1,0 +1,15 @@
+[core]
+	excludesfile = /Users/mattlanglois/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[user]
+	name = Matthew Langlois
+	email = fletchto99@gmail.com
+	signingkey = 6595ADDA5E88CF8E26C89090745A735605906737
+[commit]
+	template = /Users/mattlanglois/.stCommitMsg
+	gpgsign = true
