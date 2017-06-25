@@ -30,7 +30,7 @@ curl -L http://install.ohmyz.sh | sh
 
 # Clone dotfiles
 
-git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
+git clone git@github.com:fletchto99/dotfiles.git ~/.dotfiles
 
 # Link dotfiles
 
