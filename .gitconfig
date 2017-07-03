@@ -1,19 +1,56 @@
 [core]
-	excludesfile = /Users/mattlanglois/.gitignore_global
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+	excludesfile = ~/.gitignore_global
+
 [user]
 	name = Matthew Langlois
 	email = fletchto99@gmail.com
 	signingkey = 6595ADDA5E88CF8E26C89090745A735605906737
+
 [commit]
-	template = /Users/mattlanglois/.stCommitMsg
 	gpgsign = true
+
+[color]
+	ui = true
+
+[color "branch"]
+	current = magenta
+	remote = cyan
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red reverse
+	new = green reverse
+	whitespace = white reverse
+
+[color "status"]
+	added = green
+	changed = cyan
+	untracked = blue bold
+	branch = magenta
+
+[diff]
+	tool = meld
+
+[difftool]
+	prompt = false
+
+[difftool "meld"]
+	trustExitCode = true
+	cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
+
+[merge]
+	tool = meld
+
+[mergetool]
+	prompt = false
+
+[mergetool "meld"]
+	trustExitCode = true
+	cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+
 [alias]
+	unstage = reset HEAD
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
     lg2 = !"git lg2-specific --all"
