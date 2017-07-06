@@ -52,8 +52,8 @@ then
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		# Backup old iterm configs
-		mkdir -p ~/dotfiles_old
-		mv ~/.iterm2 ~/dotfiles_old
+		mkdir -p ~/dotfiles_old/.iterm2
+		cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
 
 		if [ -d ~/.iterm2 ]
 		then
@@ -130,7 +130,7 @@ then
 	rm -r "$HOME/Library/Application Support/Sublime Text 3/Packages"
 
 	mkdir -p "$HOME/dotfiles_old/sublime/Installed Packages"
-	cp -r "$HOME/Library/Application Support/Sublime Text 3/Packages" "$HOME/dotfiles_old/sublime/Installed Packages"
+	cp -r "$HOME/Library/Application Support/Sublime Text 3/Installed Packages" "$HOME/dotfiles_old/sublime/Installed Packages"
 	rm -r "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
 
 	#Remove any old configs sublime
