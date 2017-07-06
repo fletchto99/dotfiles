@@ -85,4 +85,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 eval "$(rbenv init -)"
+eval $(thefuck --alias)
 export PATH="/usr/local/sbin:$PATH"
