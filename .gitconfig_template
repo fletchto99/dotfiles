@@ -6,6 +6,12 @@
 	email = #EMAIL#
 	signingkey = #SIGNINGKEY#
 
+[github]
+	user = #USERNAME#
+
+[credential]
+	helper = osxkeychain
+
 [commit]
 	gpgsign = true
 
@@ -48,6 +54,9 @@
 [mergetool "meld"]
 	trustExitCode = true
 	cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+
+[push]
+	default = simple
 
 [alias]
 	unstage = reset HEAD

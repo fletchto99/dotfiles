@@ -107,6 +107,9 @@ then
 	read -p "What signing key would you like in your gitconfig: " -e -r
 	sed -i '' "s/#SIGNINGKEY#/$REPLY/g" '.gitconfig'
 
+	read -p "What is your github username: " -e -r
+	sed -i '' "s/#USERNAME#/$REPLY/g" '.gitconfig'
+
 	# Link dotfiles
 	ln -s ~/.dotfiles/.bash_profile ~/.bash_profile
 	ln -s ~/.dotfiles/.bashrc ~/.bashrc
