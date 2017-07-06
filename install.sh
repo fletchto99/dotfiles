@@ -148,11 +148,8 @@ then
 	#Setup sublime
 	ln -s  ~/.dotfiles/.sublime ~
 
-	mkdir -p "$HOME/Library/Application Support/Sublime Text 3/Packages"
-	mkdir -p "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
-
-	ln -s "$HOME/.sublime/Packages" "$HOME/Library/Application Support/Sublime Text 3"
-	ln -s "$HOME/.sublime/Installed Packages" "$HOME/Library/Application Support/Sublime Text 3"
+	ln -s "$HOME/.sublime/Packages" "$HOME/Library/Application Support/Sublime Text 3/"
+	ln -s "$HOME/.sublime/Installed Packages" "$HOME/Library/Application Support/Sublime Text 3/"
 
 
 	#Add subl command
