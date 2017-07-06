@@ -85,11 +85,11 @@ then
 	mkdir -p ~/dotfiles_old
 
 	#backup current dotfiles
-	cp ~/.bash_profile ~/dotfiles_old/.bash_profile
-	cp ~/.bashrc ~/dotfiles_old/.bashrc
-	cp ~/.gitconfig ~/dotfiles_old/.gitconfig
-	cp ~/.gitignore_global ~/dotfiles_old/.gitignore_global
-	cp ~/.zshrc ~/dotfiles_old/.zshrc
+	cp -L ~/.bash_profile ~/dotfiles_old/.bash_profile
+	cp -L ~/.bashrc ~/dotfiles_old/.bashrc
+	cp -L ~/.gitconfig ~/dotfiles_old/.gitconfig
+	cp -L ~/.gitignore_global ~/dotfiles_old/.gitignore_global
+	cp -L ~/.zshrc ~/dotfiles_old/.zshrc
 
 	rm ~/.bash_profile ~/dotfiles_old/.bash_profile
 	rm ~/.bashrc ~/dotfiles_old/.bashrc
