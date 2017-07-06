@@ -85,11 +85,17 @@ then
 	mkdir -p ~/dotfiles_old
 
 	#backup current dotfiles
-	mv ~/.bash_profile ~/dotfiles_old/.bash_profile
-	mv ~/.bashrc ~/dotfiles_old/.bashrc
-	mv ~/.gitconfig ~/dotfiles_old/.gitconfig
-	mv ~/.gitignore_global ~/dotfiles_old/.gitignore_global
-	mv ~/.zshrc ~/dotfiles_old/.zshrc
+	cp ~/.bash_profile ~/dotfiles_old/.bash_profile
+	cp ~/.bashrc ~/dotfiles_old/.bashrc
+	cp ~/.gitconfig ~/dotfiles_old/.gitconfig
+	cp ~/.gitignore_global ~/dotfiles_old/.gitignore_global
+	cp ~/.zshrc ~/dotfiles_old/.zshrc
+
+	rm ~/.bash_profile ~/dotfiles_old/.bash_profile
+	rm ~/.bashrc ~/dotfiles_old/.bashrc
+	rm ~/.gitconfig ~/dotfiles_old/.gitconfig
+	rm ~/.gitignore_global ~/dotfiles_old/.gitignore_global
+	rm ~/.zshrc ~/dotfiles_old/.zshrc
 
 	#regenerate gitconfig
 	if [ -f '.gitconfig' ]
