@@ -91,11 +91,11 @@ then
 	cp -L ~/.gitignore_global ~/dotfiles_old/.gitignore_global
 	cp -L ~/.zshrc ~/dotfiles_old/.zshrc
 
-	rm ~/.bash_profile ~/dotfiles_old/.bash_profile
-	rm ~/.bashrc ~/dotfiles_old/.bashrc
-	rm ~/.gitconfig ~/dotfiles_old/.gitconfig
-	rm ~/.gitignore_global ~/dotfiles_old/.gitignore_global
-	rm ~/.zshrc ~/dotfiles_old/.zshrc
+	rm ~/.bash_profile
+	rm ~/.bashrc
+	rm ~/.gitconfig
+	rm ~/.gitignore_global
+	rm ~/.zshrc
 
 	#regenerate gitconfig
 	if [ -f '.gitconfig' ]
