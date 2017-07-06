@@ -29,10 +29,8 @@ read -p "Do you wish to install homebrew defaults? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-
 	# Instal homebrew libs & tools
 	brew install node nmap python3 sqlmap thefuck hub
-
 fi
 
 
@@ -47,7 +45,7 @@ then
 	brew cask install keybase keepassx speedcrunch sublime-text tunnelblick iterm2 meld
 fi
 
-if [ "$TERM_PROGRAM" == "iTerm.app" ]
+if [ -d "/Applications/iTerm.app/" ]
 then
 	read -p "Do you wish to setup iTerm configs? " -n 1 -r
 	echo
@@ -55,12 +53,15 @@ then
 	then
 		# Backup old iterm configs
 		mkdir -p ~/dotfiles_old
+		mv ~/.iterm2 ~/dotfiles_old
 
-		mv ~/.iTerm2 ~/dotfiles_old
+		if [ -d ~/.iterm2 ]
+		then
+			rm -r ~/.iterm2
+		fi
 
 		# Configure iTerm 2 preferences
-		mkdir ~/.iterm2
-		ln -s  ~/.dotfiles/.iterm2 ~/.iterm2
+		ln -s  ~/.dotfiles/.iterm2 ~
 		defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.iterm2"
 		defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 	fi
@@ -69,7 +70,7 @@ else
 fi
 
 
-read -p "Do you wish to install ZSH? " -n 1 -r
+read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -122,12 +123,38 @@ read -p "Do you wish to setup sublime configs? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+
+	#Backup sublime prefs
+	mkdir -p "$HOME/dotfiles_old/sublime/Packages"
+	cp -r "$HOME/Library/Application Support/Sublime Text 3/Packages" "$HOME/dotfiles_old/sublime/Packages"
+	rm -r "$HOME/Library/Application Support/Sublime Text 3/Packages"
+
+	mkdir -p "$HOME/dotfiles_old/sublime/Installed Packages"
+	cp -r "$HOME/Library/Application Support/Sublime Text 3/Packages" "$HOME/dotfiles_old/sublime/Installed Packages"
+	rm -r "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
+
+	#Remove any old configs sublime
+	if [ -d ~/.sublime ]
+	then
+		rm -r ~/.sublime
+	fi
+
 	#Setup sublime
-	ln -s  ~/.dotfiles/.sublime ~/.sublime/
-	rm -rf "~/LibraryApplication Support/Sublime Text 3/Packages/User"
-	ln -s ~/.sublime "~/Library/Application Support/Sublime Text 3/Packages/User"
-	mkdir ~/bin
-	ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
+	ln -s  ~/.dotfiles/.sublime ~
+
+	mkdir -p "$HOME/Library/Application Support/Sublime Text 3/Packages"
+	mkdir -p "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
+
+	ln -s "$HOME/.sublime/Packages" "$HOME/Library/Application Support/Sublime Text 3/Packages"
+	ln -s "$HOME/.sublime/Installed Packages" "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
+
+
+	#Add subl command
+	if [ ! -f "$HOME/bin/subl" ]
+	then
+		mkdir -p ~/bin
+		ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
+	fi
 fi
 
 read -p "Do you wish to setup some Apple defaults? " -n 1 -r
