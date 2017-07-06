@@ -2,9 +2,9 @@
 	excludesfile = ~/.gitignore_global
 
 [user]
-	name = Matthew Langlois
-	email = fletchto99@gmail.com
-	signingkey = 6595ADDA5E88CF8E26C89090745A735605906737
+	name = #NAME#
+	email = #EMAIL#
+	signingkey = #SIGNINGKEY#
 
 [commit]
 	gpgsign = true
