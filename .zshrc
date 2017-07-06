@@ -84,6 +84,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias brewski='brew update && brew upgrade && brew cleanup; brew doctor'
+
 eval "$(rbenv init -)"
 eval $(thefuck --alias)
 export PATH="/usr/local/sbin:$PATH"
