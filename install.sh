@@ -1,12 +1,9 @@
  #!/bin/bash
 if [ -d "~/.dotfiles" ]
 then
-
 	# Clone dotfiles
 	git clone git@github.com:fletchto99/dotfiles.git ~/.dotfiles
-
-elif [[ condition ]]
-then
+else
 	echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
 fi
 
@@ -30,7 +27,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Instal homebrew libs & tools
-	brew install node nmap python3 sqlmap thefuck hub
+	brew install coreutils node nmap python3 sqlmap thefuck hub
 fi
 
 
@@ -42,7 +39,7 @@ then
 	brew tap caskroom/cask
 
 	# Install some default apps
-	brew cask install keybase keepassx speedcrunch sublime-text tunnelblick iterm2 meld
+	brew cask install keybase keepassx speedcrunch sublime-text tunnelblick iterm2 meld disablemonitor
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
@@ -164,7 +161,39 @@ read -p "Do you wish to setup some Apple defaults? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	#Setup some defaults
+
+	# Ask for the administrator password upfront -- some of these commands require admin
+	sudo -v
+
+	# Require password immediately after sleep or screen saver begins
+	defaults write com.apple.screensaver askForPassword -int 1
+	defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+	# Disable press-and-hold for keys in favor of key repeat
+	defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+	# Set a blazingly fast keyboard repeat rate
+	defaults write NSGlobalDomain KeyRepeat -int 1
+	defaults write NSGlobalDomain InitialKeyRepeat -int 10
+
+	# Disable the “Are you sure you want to open this application?” dialog
+	defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+	# Disable “natural” (Lion-style) scrolling
+	defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
+	#Set default location for screenshots
 	defaults write com.apple.screencapture location ~/Downloads/
+
+	# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+	defaults write com.apple.screencapture type -string "png"
+
+	# Enable Secure Keyboard Entry in Terminal.app
+	# See: https://security.stackexchange.com/a/47786/8918
+	defaults write com.apple.terminal SecureKeyboardEntry -bool true
+
 	killall SystemUIServer
+
+	# Prompt for re-login
+	echo "Some of these settings will require you to re-login..."
 fi
