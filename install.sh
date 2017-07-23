@@ -121,10 +121,6 @@ then
 	ln -s ~/.dotfiles/.gitignore_global ~/.gitignore_global
 	ln -s ~/.dotfiles/.zshrc ~/.zshrc
 
-	# Reload profiles
-	source ~/.zshrc
-	source ~/.bashrc
-	source ~/.bash_profile
 fi
 
 read -p "Do you wish to setup sublime configs? " -n 1 -r
