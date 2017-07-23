@@ -87,6 +87,6 @@ source $ZSH/oh-my-zsh.sh
 alias brewski='brew update && brew upgrade && brew cleanup; brew doctor'
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
 eval $(thefuck --alias)
 export PATH="/usr/local/sbin:$PATH"
