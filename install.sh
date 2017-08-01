@@ -39,7 +39,7 @@ then
 	brew tap caskroom/cask
 
 	# Install some default apps
-	brew cask install keybase keepassx speedcrunch sublime-text tunnelblick iterm2 meld disablemonitor
+	brew cask install keybase keepassx speedcrunch sublime-text tunnelblick iterm2 meld disablemonitor softu2f
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
