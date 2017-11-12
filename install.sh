@@ -39,7 +39,7 @@ then
 	brew tap caskroom/cask
 
 	# Install some default apps
-	brew cask install bartender burp-suite discord hyperdock keepassx megasync slack sublime-text vmware-fusion8 bettertouchtool dropbox iterm2 keka meld speedcrunch totalfinder wireshark disablemonitor google-chrome java             keybase          messenger        spotify          tunnelblick
+	brew cask install bartender binary-ninja discord gimp intellij-idea keepassx meld microsoft-office speedcrunch teamviewer vlc wireshark bettertouchtool burp-suite dropbox google-chrome iterm2 keybase messenger pycharm spotify totalfinder vmware-fusion8 betterzip disablemonitor filezilla hyperdock java megasync metasploit slack sublime-text tunnelblick webstorm
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
