@@ -27,7 +27,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Instal homebrew libs & tools
-	brew install coreutils node nmap python3 sqlmap thefuck hub gnupg
+	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gnupg imagemagick nmap node pinentry python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
 fi
 
 
@@ -39,7 +39,7 @@ then
 	brew tap caskroom/cask
 
 	# Install some default apps
-	brew cask install bartender binary-ninja discord gimp intellij-idea keepassx meld microsoft-office speedcrunch teamviewer vlc wireshark bettertouchtool burp-suite dropbox google-chrome iterm2 keybase messenger pycharm spotify totalfinder vmware-fusion8 betterzip disablemonitor filezilla hyperdock java megasync metasploit slack sublime-text tunnelblick webstorm
+	brew cask install bartender gimp keybase skim vlc bettertouchtool google-chrome mactex slack vmware-fusion binary-ninja hyperdock megasync speedcrunch webstorm burp-suite intellij-idea meld spotify wireshark disablemonitor iterm2 messenger sublime-text discord java metasploit teamviewer dropbox keepassx microsoft-office totalfinder filezilla keka pycharm tunnelblick
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
