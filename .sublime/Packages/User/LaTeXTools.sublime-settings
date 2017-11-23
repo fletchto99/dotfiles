@@ -73,7 +73,7 @@
 	// and compatible with the ST integrated spellcheck
 	// e.g.
 	// { "en-en": "Packages/Language - English/en_GB.dic" }
-	"tex_spellcheck_paths": {},
+	"tex_spellcheck_paths": {"en-us": "Packages/Language - English/en_US.dic"},
 
 	// sublevel to show counts for
 	// passed to texcount via the -sub= paramater

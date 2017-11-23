@@ -6,6 +6,7 @@
 	"installed_packages":
 	[
 		"A File Icon",
+		"Dictionaries",
 		"GoSublime",
 		"INI",
 		"LaTeX Word Count",
@@ -16,5 +17,9 @@
 		"Package Control",
 		"sublime-github",
 		"TodoReview"
+	],
+	"repositories":
+	[
+		"https://github.com/titoBouzout/Dictionaries"
 	]
 }

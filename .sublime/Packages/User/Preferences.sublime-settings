@@ -1,4 +1,15 @@
 {
+	"auto_complete_triggers":
+	[
+		{
+			"characters": ".",
+			"selector": "source.go"
+		},
+		{
+			"characters": "\\",
+			"selector": "text.tex.latex"
+		}
+	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"ensure_newline_at_eof_on_save": true,
 	"folder_exclude_patterns":
@@ -18,5 +29,11 @@
 	[
 		"Vintage"
 	],
+	"ignored_words":
+	[
+		"arabic",
+		"endcsname"
+	],
+	"spell_check": false,
 	"trim_trailing_white_space_on_save": true
 }
