@@ -90,7 +90,7 @@
 	// "all"       to show a phantom for each math environment
 	// "selected"  to show a phantom only for the currently selected math environment
 	// "none"      to disable math live preview
-	"preview_math_mode": "selected",
+	"preview_math_mode": "all",
 
 	// Change the scope selectors to preview math
 	// E.g. set it to "text.tex.latex meta.environment.math.block.be"
@@ -157,7 +157,7 @@
 	// "selected"  to show a phantom only for the currently selected includegraphics command
 	// "hover"     to show a popup if you hover over an includegraphics command
 	// "none"      to disable image preview
-	"preview_image_mode": "hover",
+	"preview_image_mode": "none",
 
 	// The image size in the preview popup.
 	// These are the outer dimensions of the maximal size.
