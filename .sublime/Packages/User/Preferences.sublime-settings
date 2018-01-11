@@ -18,10 +18,7 @@
 		".git",
 		".hg",
 		"CVS",
-		"vendor",
-		"node_modules",
-		"bin",
-		"tmp"
+		".latexcache"
 	],
 	"font_face": "menlo",
 	"font_size": 14,
@@ -33,6 +30,10 @@
 	[
 		"arabic",
 		"endcsname"
+	],
+	"open_externally_patterns":
+	[
+		"*.pdf"
 	],
 	"spell_check": false,
 	"trim_trailing_white_space_on_save": true
