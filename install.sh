@@ -27,7 +27,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Instal homebrew libs & tools
-	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gnupg imagemagick nmap node pinentry python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
+	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gist gnupg imagemagick nmap node pinentry python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
 fi
 
 
@@ -120,6 +120,8 @@ then
 	ln -s ~/.dotfiles/.gitconfig ~/.gitconfig
 	ln -s ~/.dotfiles/.gitignore_global ~/.gitignore_global
 	ln -s ~/.dotfiles/.zshrc ~/.zshrc
+
+	gist --login
 
 fi
 
