@@ -11,9 +11,10 @@
 		"LaTeX Word Count",
 		"LaTeX-cwl",
 		"LaTeXTools",
+		"LiveReload",
+		"Markdown Preview",
 		"Non Text Files",
 		"Package Control",
-		"SFTP",
 		"sublime-github",
 		"TodoReview"
 	],

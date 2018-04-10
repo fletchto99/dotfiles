@@ -1,0 +1,10 @@
+{
+
+    "parser": "github",
+
+    "build_action": "browser",
+
+    "enable_highlight": true,
+
+    "enable_autoreload": true,
+}

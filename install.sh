@@ -27,7 +27,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Instal homebrew libs & tools
-	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gist gnupg imagemagick nmap node pinentry python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
+	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gist gnupg hashcat imagemagick nmap nvm pinentry pipenv python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
 fi
 
 
@@ -37,9 +37,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Tap brew repos
 	brew tap caskroom/cask
+	brew tap buo/cask-upgrade
 
 	# Install some default apps
-	brew cask install bartender gimp keybase skim vlc bettertouchtool google-chrome mactex slack vmware-fusion binary-ninja hyperdock megasync speedcrunch webstorm burp-suite intellij-idea meld spotify wireshark disablemonitor iterm2 messenger sublime-text discord java metasploit teamviewer dropbox keepassx microsoft-office totalfinder filezilla keka pycharm tunnelblick
+	brew cask install bartender bettertouchtool binary-ninja burp-suite disablemonitor discord docker dropbox filezilla gimp google-chrome hyperdock intellij-idea iterm2 java keepassx keka keybase mactex megasync meld messenger metasploit microsoft-office pycharm runescape skim slack speedcrunch spotify sublime-text teamviewer totalfinder tunnelblick vlc vmware-fusion webstorm wireshark
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
@@ -124,6 +125,17 @@ then
 	gist --login
 
 fi
+
+read -p "Do you wish to setup nodejs? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	nvm install node
+	nvm alias default node
+	npm install npm-check-updates -g
+	npm install pm2 -g
+fi
+
 
 read -p "Do you wish to setup sublime configs? " -n 1 -r
 echo
