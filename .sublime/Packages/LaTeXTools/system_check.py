@@ -64,7 +64,11 @@ if _HAS_PREVIEW:
         __get_gs_command as get_gs_command
     )
 
+    if sublime.platform() == 'windows':
+        from .st_preview.preview_utils import get_system_root
+
 if sys.version_info >= (3,):
+    strbase = str
     unicode = str
 
     def expand_vars(texpath):
@@ -81,6 +85,7 @@ if sys.version_info >= (3,):
             raise value.with_traceback(tb)
         raise value
 else:
+    strbase = basestring
     def expand_vars(texpath):
         return os.path.expandvars(texpath).encode(sys.getfilesystemencoding())
 
@@ -471,6 +476,15 @@ class SystemCheckThread(threading.Thread):
             else:
                 location = which(program, path=texpath)
 
+            # convert.exe on Windows can refer to %sysroot%\convert.exe,
+            # which should not be used; in that case, simple report magick.exe
+            # as not existing
+            if program == 'convert' and sublime.platform() == 'windows':
+                system_root = get_system_root().lower()
+                if location.lower().startswith(system_root):
+                    program = 'magick'
+                    location = None
+
             available = location is not None
 
             if available:
@@ -658,6 +672,10 @@ class SystemCheckThread(threading.Thread):
 
             options = get_setting('builder_settings', {}, self.view).\
                 get('options', [])
+
+            if isinstance(options, strbase):
+                options = [options]
+
             options.extend(tex_directives.get('options', []))
 
             if len(options) > 0:
