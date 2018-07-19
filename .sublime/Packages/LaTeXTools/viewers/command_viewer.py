@@ -11,11 +11,6 @@ import sublime
 import string
 import sys
 
-try:
-    from shlex import quote
-except ImportError:
-    from pipes import quote
-
 if sys.version_info >= (3, 0):
     PY2 = False
     strbase = str
@@ -115,7 +110,7 @@ class CommandViewer(BaseViewer):
             if PY2:
                 command = str(command)
 
-            command = shlex.split(command)
+            command = shlex.split(command, False, False)
 
             if PY2:
                 command = [unicode(c) for c in command]
