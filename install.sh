@@ -2,7 +2,7 @@
 if [ -d "~/.dotfiles" ]
 then
 	# Clone dotfiles
-	git clone git@github.com:fletchto99/dotfiles.git ~/.dotfiles
+	git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
 else
 	echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
 fi
