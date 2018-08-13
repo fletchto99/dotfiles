@@ -40,7 +40,7 @@ then
 	brew tap buo/cask-upgrade
 
 	# Install some default apps
-	brew cask install bartender bettertouchtool binary-ninja burp-suite disablemonitor discord docker dropbox filezilla google-chrome hyperdock idafree intellij-idea iterm2 java keepassx keka keybase mactex megasync meld messenger metasploit microsoft-office pycharm runescape skim slack speedcrunch spotify sublime-text teamviewer totalfinder tunnelblick vlc vmware-fusion webstorm wireshark
+	brew cask install bartender bettertouchtool binary-ninja burp-suite disablemonitor discord docker dropbox filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 keepassx keka keybase mactex megasync meld messenger metasploit microsoft-office pycharm runescape skim slack speedcrunch spotify sublime-text teamviewer totalfinder tunnelblick vlc vmware-fusion webstorm wireshark zoomus
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
