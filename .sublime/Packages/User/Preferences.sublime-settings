@@ -39,6 +39,7 @@
 	[
 		"*.pdf"
 	],
+	"show_encoding": true,
 	"spell_check": false,
 	"trim_trailing_white_space_on_save": true
 }
