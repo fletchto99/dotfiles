@@ -16,8 +16,7 @@
 		"MarkdownPreview",
 		"Non Text Files",
 		"Package Control",
-		"sublime-github",
-		"TodoReview"
+		"sublime-github"
 	],
 	"repositories":
 	[
