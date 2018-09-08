@@ -25,7 +25,7 @@
 		".latexcache"
 	],
 	"font_face": "menlo",
-	"font_size": 20,
+	"font_size": 21,
 	"ignored_packages":
 	[
 		"Vintage"
@@ -41,5 +41,8 @@
 	],
 	"show_encoding": true,
 	"spell_check": false,
-	"trim_trailing_white_space_on_save": true
+	"trim_trailing_white_space_on_save": true,
+	"word_wrap": "true",
+	"file_exclude_patterns": ["*.log"],
+	"folder_exclude_patterns": ["*/tmp/**", ".git/**"]
 }
