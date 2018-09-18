@@ -31,4 +31,4 @@ for cmd in "${NODE_GLOBALS[@]}"; do
   eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
 done
 
-alias delb='git checkout master && git pull && git branch --merged master | grep -v " master" | xargs -n 1 git branch -d'
+alias delb='git checkout master && git pull && git remote prune origin && git branch --merged master | grep -v " master" | xargs -n 1 git branch -d'
