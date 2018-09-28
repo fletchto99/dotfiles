@@ -26,7 +26,7 @@
 		".git/**"
 	],
 	"font_face": "menlo",
-	"font_size": 19,
+	"font_size": 23,
 	"ignored_packages":
 	[
 		"Vintage"

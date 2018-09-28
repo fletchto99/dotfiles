@@ -32,3 +32,5 @@ for cmd in "${NODE_GLOBALS[@]}"; do
 done
 
 alias delb='git checkout master && git pull && git remote prune origin && git branch --merged master | grep -v " master" | xargs -n 1 git branch -d'
+
+eval "$(rbenv init -)"
