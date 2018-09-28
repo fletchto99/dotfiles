@@ -40,7 +40,7 @@ then
 	brew tap buo/cask-upgrade
 
 	# Install some default apps
-	brew cask install 1password bettertouchtool datagrip discord etcher hyperdock iterm2 keybase meld microsoft-office runescape softu2f steam vlc whatsappadobe-acrobat-reader binary-ninja deluge docker filezilla idafree java8 mactex messenger moom skim speedcrunch sublime-text vmware-fusion wiresharkbartender burp-suite disablemonitor encryptme google-chrome intellij-idea keka megasync metasploit plex-media-player slack spotify teamviewer webstorm zoomus
+	brew cask install 1password bettertouchtool datagrip discord etcher hyperdock iterm2 keybase meld microsoft-office runescape softu2f steam vlc whatsappadobe-acrobat-reader binary-ninja deluge docker filezilla idafree java8 mactex messenger moom skim speedcrunch sublime-text vmware-fusion wiresharkbartender burp-suite disablemonitor encryptme google-chrome intellij-idea keka megasync metasploit paragon-extfs plex-media-player slack spotify teamviewer webstorm zoomus
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
