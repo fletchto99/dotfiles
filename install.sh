@@ -27,7 +27,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Instal homebrew libs & tools
-	brew install binwalk exiftool fcrackzip ffmpeg gcc gdb gettext git-lfs gist gnupg hashcat imagemagick nmap nvm pinentry pipenv python3 radare2 readline sqlite sqlmap thefuck volatility wpscan
+	brew install binwalk docker docker-machine exiftool fcrackzip ffmpeg gdb gist git-lfs gnupg hashcat hub md5sha1sum nmap nvm pidof pinentry-mac pipenv python3 radare2 rbenv socat sqlmap volatility wpscan
 fi
 
 
@@ -40,7 +40,7 @@ then
 	brew tap buo/cask-upgrade
 
 	# Install some default apps
-	brew cask install bartender bettertouchtool binary-ninja burp-suite disablemonitor discord docker dropbox filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 keepassx keka keybase mactex megasync meld messenger metasploit microsoft-office pycharm runescape skim slack speedcrunch spotify sublime-text teamviewer totalfinder tunnelblick vlc vmware-fusion webstorm wireshark zoomus
+	brew cask install 1password bettertouchtool datagrip discord etcher hyperdock iterm2 keybase meld microsoft-office runescape softu2f steam vlc whatsappadobe-acrobat-reader binary-ninja deluge docker filezilla idafree java8 mactex messenger moom skim speedcrunch sublime-text vmware-fusion wiresharkbartender burp-suite disablemonitor encryptme google-chrome intellij-idea keka megasync metasploit plex-media-player slack spotify teamviewer webstorm zoomus
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
