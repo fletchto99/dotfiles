@@ -1,8 +1,10 @@
-# Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$PATH";
+source ~/.exports
+source ~/.aliases
+source ~/.functions
+
+PATH="$HOME/bin:$PATH";
 
 # OH MY ZSH
-export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 plugins=(git)
@@ -50,4 +52,3 @@ if [[ $#h -gt 0 ]]; then
   zstyle ':completion:*:ssh:*' hosts $h
   zstyle ':completion:*:slogin:*' hosts $h
 fi
-
