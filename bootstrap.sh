@@ -21,12 +21,16 @@ then
 fi
 
 if hash brew 2>/dev/null; then
-read -p "Do you wish to install homebrew defaults? " -n 1 -r
+	read -p "Do you wish to install homebrew defaults? " -n 1 -r
 	echo
+
+	COUNTER=0
+
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		# Instal homebrew libs & tools
 		brew install automake binwalk cmake coreutils exiftool fcrackzip ffmpeg gdb gist git git-lfs glide gnupg go grep hashcat hub nmap nvm openssh pidof pinentry-mac pipenv pv radare2 rbenv rlwrap screen socat sqlmap telnet tree volatility wpscan
+		((COUNTER++))
 	fi
 
 	read -p "Do you wish to install casks? " -n 1 -r
@@ -39,9 +43,14 @@ read -p "Do you wish to install homebrew defaults? " -n 1 -r
 
 		# Install some default apps
 		brew cask install 1password adobe-acrobat-reader bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite deluge disablemonitor discord docker encryptme etcher filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 keka keybase mactex megasync meld messenger metasploit microsoft-office moom paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text teamviewer vlc vmware-fusion whatsapp wireshark zoomus
+		((COUNTER++))
 	fi
 
-	brew cleanup
+	if [ "$COUNTER" -gt 0 ]
+	then
+		echo "Cleanuing up installers...."
+		brew cleanup
+	fi
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
@@ -51,11 +60,11 @@ then
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		# Backup old iterm configs
-		mkdir -p ~/dotfiles_old/.iterm2
-		cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
 
 		if [ -d ~/.iterm2 ]
 		then
+			mkdir -p ~/dotfiles_old/.iterm2
+			cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
 			rm -r ~/.iterm2
 		fi
 
@@ -74,16 +83,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Install some default software
 	curl -L http://install.ohmyz.sh | sh
-fi
-
-read -p "Do you wish to setup nodejs? " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-	nvm install node
-	nvm alias default node
-	npm install npm-check-updates -g
-	npm install pm2 -g
 fi
 
 if [ -d "/Applications/Sublime Text.app/" ]
@@ -114,13 +113,14 @@ then
 		ln -s "$HOME/.sublime/Packages" "$HOME/Library/Application Support/Sublime Text 3/"
 		ln -s "$HOME/.sublime/Installed Packages" "$HOME/Library/Application Support/Sublime Text 3/"
 
-
 		#Add subl command
 		if [ ! -f "$HOME/bin/subl" ]
 		then
 			mkdir -p ~/bin
 			ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 		fi
+
+		echo "Done setting up sublime! You can now also use 'subl <file>' from the terminal to open a file/directory in sublime"
 	fi
 else
 	echo "Sublime not installed; skipping sublime setup!"
@@ -130,18 +130,19 @@ read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dot
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-
 	mkdir -p ~/dotfiles_old
 
 	files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
 
 	for file in "${files[@]}"
 	do
-		if [[ -f ~/$file ]]
+		if [ -f ~/$file ]
+		then
 			cp -L ~/$file ~/dotfiles_old/$file
 			rm -f ~/$file
 		fi
 		ln -s ~/.dotfiles/$file ~/$file
+		source ~/$file
 	done
 
 	# Build gitconfig
@@ -174,5 +175,19 @@ read -p "Do you wish to setup some Apple defaults? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	./macos
+	chmod +x macos.sh
+	./macos.sh
+fi
+
+if [ hash nvm 2>/dev/null ]
+then
+	read -p "Do you wish to setup nodejs? " -n 1 -r
+	echo
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		nvm install node
+		nvm alias default node
+		npm install npm-check-updates -g
+		npm install pm2 -g
+	fi
 fi
