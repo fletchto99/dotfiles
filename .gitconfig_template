@@ -1,71 +1,105 @@
 [core]
-	excludesfile = ~/.gitignore_global
+  excludesfile = ~/.gitignore_global
+  untrackedCache = true
+
+  # Make `git rebase` safer on macOS
+  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+  trustctime = false
 
 [user]
-	name = #NAME#
-	email = #EMAIL#
-	signingkey = #SIGNINGKEY#
+  name = #NAME#
+  email = #EMAIL#
+  signingkey = #SIGNINGKEY#
 
 [github]
-	user = #USERNAME#
+  user = #USERNAME#
+  shelluser = #USERNAME#
 
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
 
 [commit]
-	gpgsign = true
+  gpgsign = true
 
 [color]
-	ui = true
+  ui = true
 
 [color "branch"]
-	current = magenta
-	remote = cyan
+  current = magenta
+  remote = cyan
 
 [color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red reverse
-	new = green reverse
-	whitespace = white reverse
+  meta = yellow bold
+  frag = magenta bold
+  old = red reverse
+  new = green reverse
+  whitespace = white reverse
 
 [color "status"]
-	added = green
-	changed = cyan
-	untracked = blue bold
-	branch = magenta
+  added = green
+  changed = cyan
+  untracked = blue bold
+  branch = magenta
 
 [diff]
-	tool = meld
+  tool = meld
+  renames = copies
+
+[diff "bin"]
+  # Use `hexdump` to diff binary files
+  textconv = hexdump -v -C
 
 [difftool]
-	prompt = false
+  prompt = false
 
 [difftool "meld"]
-	trustExitCode = true
-	cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
+  trustExitCode = true
+  cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
 
 [merge]
-	tool = meld
+  tool = meld
 
 [mergetool]
-	prompt = false
+  prompt = false
 
 [mergetool "meld"]
-	trustExitCode = true
-	cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+  trustExitCode = true
+  cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
 
 [push]
-	default = simple
+  default = simple
+  followTags = true
 
 [alias]
+    # Lol for when I forget
+    aliases = config --get-regexp alias
+
+    # Why doesn't this already exist :(
     unstage = reset --hard HEAD
+
+    # Shortcut to diff tool
     dt = difftool
+
+    # Show the diff between the latest commit and the current state
+    dl = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+    # Find branches containing commit - lets track down what broke things!!
+    fb = "!f() { git branch -a --contains $1; }; f"
+
+    # Remove branches that have already been merged with master
+    # a.k.a. ‘delete merged’
+    delb = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+    # Pretty logs
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
     lg2 = !"git lg2-specific --all"
     lg3 = !"git lg3-specific --all"
 
+    # Pretty log commands
     lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
     lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
     lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'

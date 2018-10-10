@@ -1,18 +1,21 @@
-export ZSH=$HOME/.oh-my-zsh
+# Add `~/bin` to the `$PATH`
+export PATH="$HOME/bin:$PATH";
+
+# OH MY ZSH
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+# Add tab completion for many Bash commands
+if which brew &> /dev/null && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
+  source "$(brew --prefix)/share/bash-completion/bash_completion";
+elif [ -f /etc/bash_completion ]; then
+  source /etc/bash_completion;
+fi;
 
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-
-eval $(thefuck --alias)
-export PATH="/usr/local/sbin:$PATH"
-
+# Fix for crtl+M when pressing enter
+stty sane
 
 # Speed up loading nvm thanks to https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
 # Add every binary that requires nvm, npm or node to run to an array of node globals
@@ -31,6 +34,19 @@ for cmd in "${NODE_GLOBALS[@]}"; do
   eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
 done
 
-alias delb='git checkout master && git pull && git remote prune origin && git branch --merged master | grep -v " master" | xargs -n 1 git branch -d'
-
+# Init the Ruby env
 eval "$(rbenv init -)"
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
+h=()
+if [[ -r ~/.ssh/config ]]; then
+  h=($h ${${${(@M)${(f)"$(cat ~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
+fi
+if [[ -r ~/.ssh/known_hosts ]]; then
+  h=($h ${${${(f)"$(cat ~/.ssh/known_hosts{,2} || true)"}%%\ *}%%,*}) 2>/dev/null
+fi
+if [[ $#h -gt 0 ]]; then
+  zstyle ':completion:*:ssh:*' hosts $h
+  zstyle ':completion:*:slogin:*' hosts $h
+fi
+
