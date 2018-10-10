@@ -2,6 +2,7 @@
 export PATH="$HOME/bin:$PATH";
 
 # OH MY ZSH
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 plugins=(git)
