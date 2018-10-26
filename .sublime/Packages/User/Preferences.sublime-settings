@@ -23,7 +23,10 @@
 	"folder_exclude_patterns":
 	[
 		"*/tmp/**",
-		".git/**"
+		".git/refs/",
+		".git/objects/**",
+		".git/logs/**",
+		".git/info/**"
 	],
 	"font_face": "menlo",
 	"font_size": 23,

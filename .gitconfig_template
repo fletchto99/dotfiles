@@ -42,7 +42,7 @@
   branch = magenta
 
 [diff]
-  tool = meld
+  tool = Kaleidoscope
   renames = copies
 
 [diff "bin"]
@@ -52,19 +52,18 @@
 [difftool]
   prompt = false
 
-[difftool "meld"]
-  trustExitCode = true
-  cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
+[difftool "Kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 
 [merge]
-  tool = meld
+  tool = Kaleidoscope
 
 [mergetool]
   prompt = false
 
-[mergetool "meld"]
-  trustExitCode = true
-  cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+[mergetool "Kaleidoscope"]
+    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+    trustExitCode = true
 
 [push]
   default = simple

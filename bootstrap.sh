@@ -42,7 +42,7 @@ if hash brew 2>/dev/null; then
 		brew tap buo/cask-upgrade
 
 		# Install some default apps
-		brew cask install 1password adobe-acrobat-reader bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite deluge disablemonitor discord docker encryptme etcher filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 keka keybase mactex megasync meld messenger metasploit microsoft-office moom paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text teamviewer vlc vmware-fusion whatsapp wireshark zoomus
+		brew cask install 1password adobe-acrobat-reader bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite deluge disablemonitor discord docker encryptme etcher filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 kaleidoscope keka keybase mactex megasync messenger metasploit microsoft-office moom paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text teamviewer vlc vmware-fusion whatsapp wireshark zoomus
 		((COUNTER++))
 	fi
 
