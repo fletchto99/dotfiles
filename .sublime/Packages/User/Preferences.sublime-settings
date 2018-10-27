@@ -1,7 +1,14 @@
 {
 	"added_words":
 	[
-		"internet"
+		"internet",
+		"paramaters",
+		"plugins",
+		"blog",
+		"config",
+		"blogging",
+		"fletchto99",
+		"plugin"
 	],
 	"auto_complete_triggers":
 	[
@@ -44,7 +51,7 @@
 		"*.pdf"
 	],
 	"show_encoding": true,
-	"spell_check": false,
+	"spell_check": true,
 	"tab_size": 2,
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
