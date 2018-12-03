@@ -1,4 +1,5 @@
- #!/bin/bash
+#!/usr/bin/env bash
+
 if [ -d "~/.dotfiles" ]
 then
 	# Clone dotfiles
