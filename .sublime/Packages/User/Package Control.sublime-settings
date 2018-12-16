@@ -6,8 +6,12 @@
 	"installed_packages":
 	[
 		"A File Icon",
+		"AdvancedNewFile",
+		"All Autocomplete",
+		"Anaconda",
 		"Dictionaries",
 		"Git blame",
+		"GitGutter",
 		"Github Tools",
 		"HighlightWords",
 		"INI",
@@ -18,8 +22,13 @@
 		"MarkdownPreview",
 		"Non Text Files",
 		"Package Control",
+		"Racket",
 		"SFTP",
 		"SideBarEnhancements",
+		"SublimeLinter",
+		"SublimeLinter-rubocop",
+		"SublimeLinter-ruby",
+		"SyntaxHighlightTools",
 		"Terminal"
 	],
 	"repositories":
