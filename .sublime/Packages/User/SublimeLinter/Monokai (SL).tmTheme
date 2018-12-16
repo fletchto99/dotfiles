@@ -252,6 +252,32 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Highlight Space</string>
+			<key>scope</key>
+			<string>variable.spacehighlight</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string />
+				<key>background</key>
+				<string>#F92672</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Function call</string>
+			<key>scope</key>
+			<string>variable.tabhighlight</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string />
+				<key>background</key>
+				<string>#66D9EF</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Library function</string>
 			<key>scope</key>
 			<string>support.function</string>

@@ -11,6 +11,8 @@
 		"plugin",
 		"datasource"
 	],
+	"auto_complete": true,
+	"auto_complete_commit_on_tab": true,
 	"auto_complete_triggers":
 	[
 		{
@@ -47,6 +49,7 @@
 		"arabic",
 		"endcsname"
 	],
+	"index_files": true,
 	"open_externally_patterns":
 	[
 		"*.pdf"

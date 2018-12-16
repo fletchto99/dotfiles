@@ -1,0 +1,12 @@
+%YAML 1.2
+---
+name: Whitespace
+file_extensions: .ws
+scope: source.ws
+
+contexts:
+  main:
+    - match: " "
+      scope: variable.spacehighlight.python
+    - match: \t
+      scope: variable.tabhighlight.python
