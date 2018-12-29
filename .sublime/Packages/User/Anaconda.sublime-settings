@@ -6,5 +6,6 @@
     "complete_parameters": true,
     "auto_formatting": true,
     "anaconda_gutter_marks": false,
-    "anaconda_linter_phantoms": true,
+    "anaconda_linter_phantoms": false,
+    "anaconda_linter_show_errors_on_save": true
 }
