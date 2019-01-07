@@ -2,8 +2,6 @@ source ~/.exports
 source ~/.aliases
 source ~/.functions
 
-PATH="$HOME/bin:$PATH";
-
 # OH MY ZSH
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
