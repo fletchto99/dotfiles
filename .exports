@@ -31,7 +31,7 @@ export GPG_TTY=$(tty);
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Add homebrew bins to path
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:$PATH:.git/safe/../../bin:$HOME/bin"
 
 # Oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
