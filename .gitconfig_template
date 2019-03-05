@@ -18,6 +18,12 @@
 [credential]
   helper = osxkeychain
 
+[protocol]
+  version = 2
+
+[fetch]
+  prune = true
+
 [commit]
   gpgsign = true
 
