@@ -79,6 +79,9 @@
     # Lol for when I forget
     aliases = config --get-regexp alias
 
+    # Patch mode for adding so I don't add random stuff
+    addp = add --patch
+
     # Why doesn't this already exist :(
     unstage = reset --hard HEAD
 
@@ -94,9 +97,8 @@
     # Find branches containing commit - lets track down what broke things!!
     fb = "!f() { git branch -a --contains $1; }; f"
 
-    # Remove branches that have already been merged with master
-    # a.k.a. ‘delete merged’
-    delb = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    # Recently committed to branches
+    recent = for-each-ref --count=30 --sort=-committerdate --format="%(committerdate:relative)%09%(refname:short)" refs/heads
 
     # Pretty logs
     lg = !"git lg1"
@@ -125,3 +127,9 @@
 
 [url "git://gist.github.com/"]
     insteadOf = "gist:"
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
