@@ -43,9 +43,11 @@
 		"*.swf",
 		"*.jar",
 		"*.zip",
-		".git/**",
-		"node_modules/**",
-		"*.log"
+		".git/",
+		"node_modules/",
+		"*.log",
+		"*.irb_history",
+		"vendor/"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"ensure_newline_at_eof_on_save": true,
