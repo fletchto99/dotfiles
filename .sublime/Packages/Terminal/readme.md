@@ -65,7 +65,7 @@ Here are some example setups:
   // Unset LD_PRELOAD which may cause problems for sublime with imfix
   "env": {"LD_PRELOAD": null}
 }
-
+```
 #### iTerm on OS X
 
 ```js
@@ -88,6 +88,14 @@ Here are some example setups:
 ```js
 {
   "terminal": "iTerm2-v3.sh"
+}
+```
+
+#### Hyper on OS X
+
+```js
+{
+  "terminal": "hyper.sh"
 }
 ```
 
