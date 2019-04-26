@@ -131,3 +131,8 @@ function certinfo() {
 function tre() {
   tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
+
+# Display the man-page as a pdf in preview
+function man-preview() {
+  man -t "$@" | open -f -a Preview
+}
