@@ -2,7 +2,7 @@
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 # Prunes all branchs no longer on the origin
-alias delb='git checkout master && git pull --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d -v'
+alias delb='git checkout master && git pull --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -D -v'
 
 # Get week number
 alias week='date +%V'
