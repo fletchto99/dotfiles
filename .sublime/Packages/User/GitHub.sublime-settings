@@ -1,0 +1,9 @@
+{
+	"accounts":
+	{
+		"GitHub":
+		{
+			"base_uri": "https://api.github.com"
+		}
+	}
+}
