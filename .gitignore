@@ -5,3 +5,4 @@
 .sublime/Packages/User/oscrypto-ca-bundle.crt
 .latexcache/
 **/*.crt
+GitHubBuildStatus.sublime-settings

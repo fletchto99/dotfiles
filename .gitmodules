@@ -1,0 +1,4 @@
+[submodule ".sublime/Packages/sublime-github"]
+	path = .sublime/Packages/sublime-github
+	url = git@github.com:fletchto99/sublime-github.git
+	branch = fletchto99/open-pr
