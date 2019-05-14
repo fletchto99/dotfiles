@@ -88,6 +88,9 @@
     # Shortcut to diff tool
     dt = difftool
 
+    # Shortcut to diff tool on staged files
+    dts = difftool --staged
+
     # Show the diff between the latest commit and the current state
     dl = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
