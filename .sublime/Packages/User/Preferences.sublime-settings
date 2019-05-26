@@ -64,7 +64,7 @@
 		".git/info/**"
 	],
 	"font_face": "menlo",
-	"font_size": 22,
+	"font_size": 21,
 	"ignored_packages":
 	[
 		"Vintage"
