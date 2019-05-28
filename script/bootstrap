@@ -30,7 +30,7 @@ if hash brew 2>/dev/null; then
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		# Instal homebrew libs & tools
-		brew install automake binwalk cmake coreutils exiftool fcrackzip ffmpeg gdb gist git git-lfs glide gnupg go grep hashcat hub nmap nvm openssh pidof pinentry-mac pipenv pv radare2 rbenv rlwrap screen socat sqlmap telnet tree volatility wpscan
+		brew install automake binwalk cmake coreutils exiftool fcrackzip ffmpeg gdb gist git git-lfs glide gnupg go grep hashcat hub jq nmap nodenv nvm openssh pidof pinentry-mac pipenv pv radare2 rbenv rlwrap screen sl socat sqlmap telnet thefuck tree volatility wpscan
 		((COUNTER++))
 	fi
 
@@ -44,7 +44,7 @@ if hash brew 2>/dev/null; then
 		brew tap homebrew/cask-drivers
 
 		# Install some default apps
-		brew cask install 1password adobe-acrobat-reader bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite deluge disablemonitor discord docker encryptme etcher filezilla google-chrome hyperdock idafree intellij-idea iterm2 java8 kaleidoscope kap keka keybase logitech-gaming-software mactex messenger metasploit microsoft-office moom nextcloud paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text teamviewer vlc vmware-fusion whatsapp wireshark zoomus
+		brew cask install 1password adobe-acrobat-reader alfred balenaetcher bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite disablemonitor discord docker google-chrome hyperdock idafree imageoptim intellij-idea iterm2 java8 kaleidoscope kap keka keybase logitech-gaming-software mactex messenger metasploit microsoft-office nextcloud paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text tunnelblick transmit vlc vmware-fusion whatsapp wireshark zoomus
 		((COUNTER++))
 	fi
 
