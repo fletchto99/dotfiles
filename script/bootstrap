@@ -29,8 +29,8 @@ if hash brew 2>/dev/null; then
 
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
-		# Instal homebrew libs & tools
-		brew install automake binwalk cmake coreutils exiftool fcrackzip ffmpeg gdb gist git git-lfs glide gnupg go grep hashcat hub jq nmap nodenv nvm openssh pidof pinentry-mac pipenv pv radare2 rbenv rlwrap screen sl socat sqlmap telnet thefuck tree volatility wpscan
+		# Install homebrew libs & tools
+		brew install automake binwalk cmake coreutils exiftool fcrackzip ffmpeg gdb gist git git-lfs glide gnupg go grep hashcat hub jq nmap nodenv nvm openssh pidof pinentry-mac pipenv pv radare2 rbenv rlwrap screen sl socat sqlmap telnet thefuck tree volatility wpscan zsh
 		((COUNTER++))
 	fi
 
@@ -44,7 +44,7 @@ if hash brew 2>/dev/null; then
 		brew tap homebrew/cask-drivers
 
 		# Install some default apps
-		brew cask install 1password adobe-acrobat-reader alfred balenaetcher bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite disablemonitor discord docker google-chrome hyperdock idafree imageoptim intellij-idea iterm2 java8 kaleidoscope kap keka keybase logitech-gaming-software mactex messenger metasploit microsoft-office nextcloud paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text tunnelblick transmit vlc vmware-fusion whatsapp wireshark zoomus
+		brew cask install 1password adobe-acrobat-reader alfred balenaetcher bartender bettertouchtool binary-ninja burp-suite datagrip db-browser-for-sqlite disablemonitor discord docker google-chrome hyperdock idafree imageoptim intellij-idea iterm2 kaleidoscope kap keka keybase little-snitch mactex messenger metasploit microsoft-office nextcloud paragon-extfs plex-media-player runescape skim slack softu2f speedcrunch spotify steam sublime-text tunnelblick transmit vlc vmware-fusion whatsapp wireshark zoomus
 		((COUNTER++))
 	fi
 
@@ -72,11 +72,34 @@ then
 
 		# Configure iTerm 2 preferences
 		ln -s  ~/.dotfiles/.iterm2 ~
-		defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.iterm2"
 		defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+		defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.iterm2"
+		sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
 	fi
 else
 	echo "iTerm not installed, skipping iTerm setup!"
+fi
+
+if [ -d "/Applications/Alfred 4.app/" ]
+then
+	read -p "Do you wish to setup alfred 4 configs? " -n 1 -r
+	echo
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		# Backup old alfred configs
+
+		if [ -d ~/.alfred ]
+		then
+			mkdir -p ~/dotfiles_old/.alfred
+			cp -r ~/.alfred ~/dotfiles_old/.alfred
+			rm -r ~/.alfred
+		fi
+
+		# Configure Alfred preferences
+		ln -s  ~/.dotfiles/.alfred ~
+	fi
+else
+	echo "Alfred not installed, skipping alfred setup!"
 fi
 
 read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
@@ -192,4 +215,6 @@ then
 		npm install npm-check-updates -g
 		npm install pm2 -g
 	fi
+else
+	echo "NVM not installed, skipping node setup!"
 fi
