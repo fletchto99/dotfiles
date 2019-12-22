@@ -30,6 +30,19 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>4555FBFF-D782-4A34-9011-3A8E7BEF135A</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gp</string>
+			<key>text</key>
+			<string>Github Pulls</string>
+			<key>url</key>
+			<string>https://github.com/github/github/pulls?q=is%3Aopen+is%3Apr+author%3A{query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>587708A5-0877-4D1C-97FE-089445CF8129</key>
 		<dict>
 			<key>enabled</key>

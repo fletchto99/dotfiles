@@ -13,7 +13,8 @@
 		"refactor",
 		"curriculars",
 		"cyber",
-		"hackathon"
+		"hackathon",
+		"sanitization"
 	],
 	"auto_complete": true,
 	"auto_complete_commit_on_tab": true,
@@ -64,7 +65,7 @@
 		".git/info/**"
 	],
 	"font_face": "menlo",
-	"font_size": 21,
+	"font_size": 23,
 	"ignored_packages":
 	[
 		"Vintage"
