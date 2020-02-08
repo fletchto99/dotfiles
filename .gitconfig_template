@@ -79,6 +79,9 @@
     # Lol for when I forget
     aliases = config --get-regexp alias
 
+    # List remotes
+    rv = remote -v
+
     # Patch mode for adding so I don't add random stuff
     addp = add --patch
 
