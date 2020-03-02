@@ -7,4 +7,5 @@ file_extensions: ['yarn.lock']
 scope: source.yaml.yarn
 contexts:
   main:
+    - include: scope:source.yaml#prototype
     - include: scope:source.yaml

@@ -7,4 +7,5 @@ file_extensions: ['gulpfile.js', 'gulpfile.babel.js']
 scope: source.js.gulpfile
 contexts:
   main:
+    - include: scope:source.js#prototype
     - include: scope:source.js

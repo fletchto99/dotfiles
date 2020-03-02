@@ -7,4 +7,5 @@ file_extensions: ['spec.ts', 'test.ts']
 scope: source.ts.unittest
 contexts:
   main:
+    - include: scope:source.ts#prototype
     - include: scope:source.ts

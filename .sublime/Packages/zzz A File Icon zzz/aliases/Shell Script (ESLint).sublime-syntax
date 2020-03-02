@@ -7,4 +7,5 @@ file_extensions: ['.eslintignore']
 scope: source.shell.eslint
 contexts:
   main:
+    - include: scope:source.shell#prototype
     - include: scope:source.shell

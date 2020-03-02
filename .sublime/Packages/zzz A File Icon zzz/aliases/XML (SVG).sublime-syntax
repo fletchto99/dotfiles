@@ -7,4 +7,5 @@ file_extensions: ['svg']
 scope: text.xml.svg
 contexts:
   main:
+    - include: scope:text.xml#prototype
     - include: scope:text.xml

@@ -7,4 +7,5 @@ file_extensions: ['doc', 'docx', 'docm', 'docxml', 'dotm', 'dotx', 'wri']
 scope: text.plain.word
 contexts:
   main:
+    - include: scope:text.plain#prototype
     - include: scope:text.plain

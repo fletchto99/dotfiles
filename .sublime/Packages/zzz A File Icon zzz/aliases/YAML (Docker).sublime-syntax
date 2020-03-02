@@ -7,4 +7,5 @@ file_extensions: ['docker-compose.yml']
 scope: source.yaml.docker
 contexts:
   main:
+    - include: scope:source.yaml#prototype
     - include: scope:source.yaml

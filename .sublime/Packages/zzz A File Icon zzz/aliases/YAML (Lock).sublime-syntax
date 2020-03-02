@@ -7,4 +7,5 @@ file_extensions: ['Gemfile.lock', 'Berksfile.lock']
 scope: source.yaml.lock
 contexts:
   main:
+    - include: scope:source.yaml#prototype
     - include: scope:source.yaml

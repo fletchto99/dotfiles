@@ -7,4 +7,5 @@ file_extensions: ['.pug-lintrc', '.pug-lintrc.json']
 scope: source.json.puglint
 contexts:
   main:
+    - include: scope:source.json#prototype
     - include: scope:source.json

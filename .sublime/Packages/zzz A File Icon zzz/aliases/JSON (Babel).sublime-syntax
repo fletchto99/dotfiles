@@ -7,4 +7,5 @@ file_extensions: ['.babelrc']
 scope: source.json.babel
 contexts:
   main:
+    - include: scope:source.json#prototype
     - include: scope:source.json

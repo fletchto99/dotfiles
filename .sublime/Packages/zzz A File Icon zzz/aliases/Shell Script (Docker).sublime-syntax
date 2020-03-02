@@ -7,4 +7,5 @@ file_extensions: ['.dockerignore']
 scope: source.shell.docker
 contexts:
   main:
+    - include: scope:source.shell#prototype
     - include: scope:source.shell

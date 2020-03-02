@@ -7,4 +7,5 @@ file_extensions: ['.stylelintrc.js', 'stylelint.config.js']
 scope: source.js.stylelint
 contexts:
   main:
+    - include: scope:source.js#prototype
     - include: scope:source.js
