@@ -7,4 +7,5 @@ file_extensions: ['.no-sublime-package', 'hidden-color-scheme', 'hidden-theme', 
 scope: source.json.sublime
 contexts:
   main:
+    - include: scope:source.json#prototype
     - include: scope:source.json

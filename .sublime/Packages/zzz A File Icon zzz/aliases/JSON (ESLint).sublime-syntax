@@ -7,4 +7,5 @@ file_extensions: ['.eslintrc', '.eslintrc.json']
 scope: source.json.eslint
 contexts:
   main:
+    - include: scope:source.json#prototype
     - include: scope:source.json

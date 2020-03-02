@@ -7,4 +7,5 @@ file_extensions: ['copying.md', 'copyright.md', 'license.md']
 scope: text.html.markdown.license
 contexts:
   main:
+    - include: scope:text.html.markdown#prototype
     - include: scope:text.html.markdown

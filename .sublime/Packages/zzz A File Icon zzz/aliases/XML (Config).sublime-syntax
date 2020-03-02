@@ -7,4 +7,5 @@ file_extensions: ['config']
 scope: text.xml.config
 contexts:
   main:
+    - include: scope:text.xml#prototype
     - include: scope:text.xml

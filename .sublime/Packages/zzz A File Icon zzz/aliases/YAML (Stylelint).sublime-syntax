@@ -7,4 +7,5 @@ file_extensions: ['.stylelintrc.yaml', '.stylelintrc.yml']
 scope: source.yaml.stylelint
 contexts:
   main:
+    - include: scope:source.yaml#prototype
     - include: scope:source.yaml

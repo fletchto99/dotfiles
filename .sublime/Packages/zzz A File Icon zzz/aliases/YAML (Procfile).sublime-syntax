@@ -7,4 +7,5 @@ file_extensions: ['Procfile']
 scope: source.yaml.procfile
 contexts:
   main:
+    - include: scope:source.yaml#prototype
     - include: scope:source.yaml

@@ -7,4 +7,5 @@ file_extensions: ['.eslintrc.js']
 scope: source.js.eslint
 contexts:
   main:
+    - include: scope:source.js#prototype
     - include: scope:source.js

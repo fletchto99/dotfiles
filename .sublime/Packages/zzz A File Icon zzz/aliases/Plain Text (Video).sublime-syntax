@@ -7,4 +7,5 @@ file_extensions: ['avi', 'mp4', 'mov', 'mkv', 'h264', 'webm', 'wmv', 'ogv', 'ogg
 scope: text.plain.video
 contexts:
   main:
+    - include: scope:text.plain#prototype
     - include: scope:text.plain

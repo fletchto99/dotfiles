@@ -7,4 +7,5 @@ file_extensions: ['csproj', 'fsproj', 'shproj', 'sqlproj', 'vbproj', 'vcxproj', 
 scope: text.xml.visualstudio
 contexts:
   main:
+    - include: scope:text.xml#prototype
     - include: scope:text.xml

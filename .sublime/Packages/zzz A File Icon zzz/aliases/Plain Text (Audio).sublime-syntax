@@ -7,4 +7,5 @@ file_extensions: ['mp3', 'm4p', 'aac', 'aiff', 'au', 'flac', 'm4a', 'mpc', 'mp+'
 scope: text.plain.audio
 contexts:
   main:
+    - include: scope:text.plain#prototype
     - include: scope:text.plain

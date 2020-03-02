@@ -7,4 +7,5 @@ file_extensions: ['composer.json', 'composer.lock']
 scope: source.json.composer
 contexts:
   main:
+    - include: scope:source.json#prototype
     - include: scope:source.json
