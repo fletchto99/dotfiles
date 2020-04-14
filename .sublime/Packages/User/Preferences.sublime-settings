@@ -68,7 +68,8 @@
 	"font_size": 20,
 	"ignored_packages":
 	[
-		"Vintage"
+		"Vintage",
+		"zzz A File Icon zzz"
 	],
 	"ignored_words":
 	[
