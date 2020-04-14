@@ -35,7 +35,8 @@
 		"SublimeLinter-ruby",
 		"SyntaxHighlightTools",
 		"TabsExtra",
-		"Terminal"
+		"Terminal",
+		"TypeScript Syntax"
 	],
 	"repositories":
 	[
