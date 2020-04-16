@@ -45,6 +45,7 @@ matrix:
       - pre
       - a.magiclink-compare
       - a.magiclink-commit
+      - a.magiclink-issue
       - span.keys
       - .MathJax_Preview
       - .md-nav__link
@@ -52,6 +53,7 @@ matrix:
       - .md-source__repository
       - .headerlink
       - .md-icon
+      - .md-footer-social__link
   - pyspelling.filters.url:
 
 - name: markdown

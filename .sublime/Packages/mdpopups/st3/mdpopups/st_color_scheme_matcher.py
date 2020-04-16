@@ -28,16 +28,20 @@ import sublime
 import codecs
 import re
 from .file_strip.json import sanitize_json
-from .rgba import RGBA, clamp, round_int
+from .rgba import RGBA, clamp, round_int, CS_RGB, CS_HSL, CS_HWB, OP_SCALE, OP_ADD, OP_SUB, OP_NULL
 from . import x11colors
 from os import path
 from collections import namedtuple
 from plistlib import readPlistFromBytes
 import decimal
+import math
 
 NEW_SCHEMES = int(sublime.version()) >= 3150
 FONT_STYLE = "font_style" if int(sublime.version()) >= 3151 else "fontStyle"
 GLOBAL_OPTIONS = "globals" if int(sublime.version()) >= 3152 else "defaults"
+
+CONVERT_TURN = 360
+CONVERT_GRAD = 90 / 100
 
 # XML
 XML_COMMENT_RE = re.compile(br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->")
@@ -47,7 +51,8 @@ FLOAT_TRIM_RE = re.compile(r'^(?P<keep>\d+)(?P<trash>\.0+|(?P<keep2>\.\d*[1-9])0
 
 COLOR_PARTS = {
     "percent": r"[+\-]?(?:(?:\d*\.\d+)|\d+)%",
-    "float": r"[+\-]?(?:(?:\d*\.\d+)|\d+)"
+    "float": r"[+\-]?(?:(?:\d*\.\d+)|\d+)",
+    "angle": r"[+\-]?(?:(?:\d*\.\d+)|\d+)(deg|rad|turn|grad)?"
 }
 
 RGB_COLORS = r"""(?x)
@@ -63,11 +68,11 @@ RGB_COLORS = r"""(?x)
 
 HSL_COLORS = r"""(?x)
     \b(?P<hsl>hsl\(\s*(?P<hsl_content>%(float)s\s*,\s*%(percent)s\s*,\s*%(percent)s)\s*\)) |
-    \b(?P<hsla>hsla\(\s*(?P<hsla_content>%(float)s\s*,\s*(?:%(percent)s\s*,\s*){2}(?:%(percent)s|%(float)s))\s*\))
+    \b(?P<hsla>hsla\(\s*(?P<hsla_content>%(angle)s\s*,\s*(?:%(percent)s\s*,\s*){2}(?:%(percent)s|%(float)s))\s*\))
 """ % COLOR_PARTS
 
 HWB_COLORS = r"""(?x)
-    \b(?P<hwb>hwb\(\s*(?P<hwb_content>%(float)s\s*,\s*%(percent)s\s*,\s*%(percent)s
+    \b(?P<hwb>hwb\(\s*(?P<hwb_content>%(angle)s\s*,\s*%(percent)s\s*,\s*%(percent)s
     (?:\s*,\s*(?:%(percent)s|%(float)s))?)\s*\))
 """ % COLOR_PARTS
 
@@ -107,13 +112,20 @@ COLOR_MOD_RE = re.compile(
     color\(\s*
         (?P<base>\#[\dA-Fa-f]{8}|\#[\dA-Fa-f]{6})
         \s+(?:
-            (?P<blend>blenda?)\((?P<blend_color>\#[\dA-Fa-f]{8}|\#[\dA-Fa-f]{6})\s+(?P<blend_percent>%(percent)s)\) |
-            (?P<alpha>a(?:lpha)?)\((?P<alpha_value>(?:%(percent)s|%(float)s))\)
+            (?P<blend>blenda?)\(
+                (?P<blend_color>\#[\dA-Fa-f]{8}|\#[\dA-Fa-f]{6})\s+
+                (?P<blend_percent>%(percent)s)
+                (?:\s+(?P<blend_mode>hsl|rgb|hwb))?\) |
+            (?P<alpha>a(?:lpha)?)\(\s*(?P<alpha_op>[\+\-]\s+|\*\s*)?(?P<alpha_value>(?:%(percent)s|%(float)s))\s*\) |
+            (?P<sat>s(?:aturation)?)\(\s*(?P<sat_op>[\+\-]\s+|\*\s*)?(?P<sat_value>(?:%(percent)s))\s*\) |
+            (?P<lit>l(?:ightness)?)\(\s*(?P<lit_op>[\+\-]\s+|\*\s*)?(?P<lit_value>(?:%(percent)s))\s*\)
         )
         (?P<other>(?:
             \s+(?:
-                blenda?\((?:\#[\dA-Fa-f]{8}|\#[\dA-Fa-f]{6})\s+%(percent)s\) |
-                a(?:lpha)?\((?:%(percent)s|%(float)s)\)
+                blenda?\((?:\#[\dA-Fa-f]{8}|\#[\dA-Fa-f]{6})\s+%(percent)s(?:\s+(?:hsl|rgb|hwb))?\) |
+                a(?:lpha)?\(\s*(?:[\+\-]\s+|\*\s*)?(?:%(percent)s|%(float)s)\s*\) |
+                s(?:aturation)?\(\s*(?:[\+\-]\s+|\*\s*)?(?:%(percent)s)\s*\) |
+                l(?:ightness)?\(\s*(?:[\+\-]\s+|\*\s*)?(?:%(percent)s)\s*\)
             )
         )+)?
     \s*\)
@@ -121,6 +133,29 @@ COLOR_MOD_RE = re.compile(
 )
 
 RE_CAMEL_CASE = re.compile('[A-Z]')
+
+OP_MAP = {
+    '': OP_NULL,
+    '*': OP_SCALE,
+    '+': OP_ADD,
+    '-': OP_SUB
+}
+
+
+def norm_angle(angle):
+    """Normalize angle units."""
+
+    if angle.endswith('turn'):
+        value = float(angle[:-4]) * CONVERT_TURN
+    elif angle.endswith('rad'):
+        value = math.degrees(float(angle[:-3]))
+    elif angle.endswith('grad'):
+        value = float(angle[:-3]) * CONVERT_GRAD
+    elif angle.endswith('deg'):
+        value = float(angle[:-3])
+    else:
+        value = float(angle)
+    return value
 
 
 def packages_path(pth):
@@ -168,30 +203,65 @@ def alpha_percent_normalize(perc):
     return alpha
 
 
-def blend(m):
+def blend_foreground(m):
+    """Blend foreground with limited capability."""
+
+    return blend(m, True)
+
+
+def blend(m, limit=False):
     """Blend colors."""
 
     base = m.group('base')
-    if m.group('blend'):
+    if m.group('blend') and not limit:
         blend_type = m.group('blend')
         color = m.group('blend_color')
         percent = m.group('blend_percent')
+        mode = m.group('blend_mode')
+        if not mode:
+            color_space = CS_RGB
+        elif mode == 'rgb':
+            color_space = CS_RGB
+        elif mode == 'hsl':
+            color_space = CS_HSL
+        else:
+            color_space = CS_HWB
+
         if percent.endswith('%'):
             percent = float(percent.strip('%'))
         else:
             percent = int(alpha_dec_normalize(percent), 16) * (100.0 / 255.0)
         rgba = RGBA(base)
-        rgba.blend(color, percent, alpha=(blend_type == 'blenda'))
+        rgba.blend(color, percent, alpha=(blend_type == 'blenda'), color_space=color_space)
+        color = rgba.get_rgb() if rgba.a == 255 else rgba.get_rgba()
+    elif m.group('alpha_value') and not limit:
+        percent = m.group('alpha_value')
+        op = OP_MAP[m.group('alpha_op').strip() if m.group('alpha_op') else '']
+        if percent.endswith('%'):
+            alpha = percent = float(percent.rstrip('%')) / 100.0
+        else:
+            alpha = percent = float(percent)
+        rgba = RGBA(base)
+        rgba.alpha(alpha, op)
+        color = rgba.get_rgb() if rgba.a == 255 else rgba.get_rgba()
+    elif m.group('sat_value'):
+        percent = m.group('sat_value')
+        op = OP_MAP[m.group('sat_op').strip() if m.group('sat_op') else '']
+        percent = float(percent.rstrip('%')) / 100.0
+        rgba = RGBA(base)
+        rgba.saturation(percent, op)
+        color = rgba.get_rgb() if rgba.a == 255 else rgba.get_rgba()
+    elif m.group('lit_value'):
+        percent = m.group('lit_value')
+        op = OP_MAP[m.group('lit_op').strip() if m.group('lit_op') else '']
+        percent = float(percent.rstrip('%')) / 100.0
+        rgba = RGBA(base)
+        rgba.luminance(percent, op)
         color = rgba.get_rgb() if rgba.a == 255 else rgba.get_rgba()
     else:
-        percent = m.group('alpha_value')
-        if percent.endswith('%'):
-            alpha = int(alpha_percent_normalize(percent), 16)
-        else:
-            alpha = int(alpha_dec_normalize(percent), 16)
         rgba = RGBA(base)
-        rgba.a = alpha
         color = rgba.get_rgb() if rgba.a == 255 else rgba.get_rgba()
+
     if m.group('other'):
         color = "color(%s %s)" % (color, m.group('other'))
     return color
@@ -268,9 +338,9 @@ def translate_color(m, var, var_src):
             else:
                 alpha = alpha_dec_normalize(content[3])
         elif groups.get('hsl'):
-            content = [x.strip() for x in m.group('hsl_content').split(',')]
+            content = [x.strip().lower() for x in m.group('hsl_content').split(',')]
             rgba = RGBA()
-            hue = float(content[0])
+            hue = norm_angle(content[0])
             if hue < 0.0 or hue > 360.0:
                 hue = hue % 360.0
             h = hue / 360.0
@@ -538,6 +608,12 @@ class ColorSchemeMatcher(object):
                 bgcolor = item.get('background', None)
                 if isinstance(bgcolor, str):
                     item['background'] = translate_color(COLOR_RE.match(bgcolor.strip()), self.variables, {})
+                    fgadj = item.get('foreground_adjust', None)
+                    if isinstance(fgadj, str) and fgadj:
+                        content = COLOR_RGB_SPACE_RE.sub(
+                            (lambda match, v=self.variables, vs={}: translate_color(match, v, vs)), fgadj
+                        )
+                        item['foreground_adjust'] = content
                 # Selection foreground color
                 scolor = item.get('selection_foreground', None)
                 if isinstance(scolor, str):
@@ -583,6 +659,7 @@ class ColorSchemeMatcher(object):
             scope = item.get('scope', None)
             color = None
             bgcolor = None
+            fgadj = None
             scolor = None
             style = []
             if scope is not None:
@@ -590,6 +667,8 @@ class ColorSchemeMatcher(object):
                 color = item.get('foreground', None)
                 # Background color
                 bgcolor = item.get('background', None)
+                if bgcolor:
+                    fgadj = item.get('foreground_adjust', None)
                 # Selection foreground color
                 scolor = item.get('selection_foreground', None)
                 # Font style
@@ -598,9 +677,9 @@ class ColorSchemeMatcher(object):
                         if s == "bold" or s == "italic":  # or s == "underline":
                             style.append(s)
 
-                self.add_entry(name, scope, color, bgcolor, scolor, style)
+                self.add_entry(name, scope, color, bgcolor, fgadj, scolor, style)
 
-    def add_entry(self, name, scope, color, bgcolor, scolor, style):
+    def add_entry(self, name, scope, color, bgcolor, fgadj, scolor, style):
         """Add color entry."""
 
         color_gradient = None
@@ -630,7 +709,8 @@ class ColorSchemeMatcher(object):
             "bgcolor_simulated": bg_sim,
             "selection_color": sfg,
             "selection_color_simulated": sfg_sim,
-            "style": style
+            "style": style,
+            "foreground_adjust": fgadj
         }
 
     def process_color_gradient(self, colors, simple_strip=False, bground=None):
@@ -707,7 +787,7 @@ class ColorSchemeMatcher(object):
 
         return self.scheme_file
 
-    def guess_color(self, scope_key, selected=False, explicit_background=False):
+    def guess_color(self, scope_key, selected=False, explicit_background=False, no_bold=False, no_italic=False):
         """
         Guess the colors and style of the text for the given Sublime scope.
 
@@ -729,6 +809,7 @@ class ColorSchemeMatcher(object):
         color_gradient_selector = None
         bgcolor = self.special_colors['background']['color'] if not explicit_background else None
         bgcolor_sim = self.special_colors['background']['color_simulated'] if not explicit_background else None
+        fgadj = None
         scolor = self.special_colors['selection_foreground']['color']
         scolor_sim = self.special_colors['selection_foreground']['color_simulated']
         style = set([])
@@ -783,7 +864,8 @@ class ColorSchemeMatcher(object):
                 if self.colors[key]["style"] is not None and match > best_match_style:
                     best_match_style = match
                     for s in self.colors[key]["style"]:
-                        style.add(s)
+                        if not (s == "bold" and no_bold) and not (s == "italic" and no_italic):
+                            style.add(s)
                         if s == "bold":
                             style_selectors["bold"] = SchemeSelectors(
                                 self.colors[key]["name"], self.colors[key]["scope"]
@@ -797,6 +879,7 @@ class ColorSchemeMatcher(object):
                     bgcolor = self.colors[key]["bgcolor"]
                     bgcolor_sim = self.colors[key]["bgcolor_simulated"]
                     bg_selector = SchemeSelectors(self.colors[key]["name"], self.colors[key]["scope"])
+                    fgadj = self.colors[key]["foreground_adjust"]
 
             if len(style) == 0:
                 style = ""
@@ -806,6 +889,23 @@ class ColorSchemeMatcher(object):
             if not isinstance(color_gradient, list):
                 color_gradient = None
                 color_gradient_selector = None
+
+            if fgadj is not None:
+                for c in (color_gradient if color_gradient is not None else [color]):
+                    color_list = []
+                    try:
+                        content = 'color({} {})'.format(c, fgadj)
+                        n = -1
+                        while n:
+                            content, n = COLOR_MOD_RE.subn(blend_foreground, content)
+                        if c != content:
+                            mod, mod_sim = self.process_color(content)
+                            if mod is not None:
+                                color_list.append((mod, mod_sim))
+                        color_gradient = color_list
+                        color, color_sim = color_gradient[0]
+                    except Exception:
+                        pass
 
             self.matched[scope_key] = {
                 "color": color,

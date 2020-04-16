@@ -1,7 +1,3 @@
-[submodule ".sublime/Packages/sublime-github"]
-	path = .sublime/Packages/sublime-github
-	url = git@github.com:fletchto99/sublime-github.git
-	branch = fletchto99/open-pr
 [submodule ".sublime/Packages/GitHubBuildStatus"]
 	path = .sublime/Packages/GitHubBuildStatus
 	url = git@github.com:randy3k/GitHubBuildStatus.git
