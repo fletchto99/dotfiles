@@ -1,4 +1,5 @@
-[![Unix Build Status][travis-image]][travis-link]
+[![Discord][discord-image]][discord-link]
+[![Build][github-ci-image]][github-ci-link]
 ![License][license-image]
 # Sublime Markdown Popups
 Sublime Markdown Popups (mdpopups) is a library for Sublime Text plugins.  It utilizes the new plugin API found in ST3 Beta 3080+ for generating tooltip popups. It also provides API methods for generating and styling the new phantom elements introduced in ST3 Beta 3118+.  Mdpopups utilizes Python Markdown with a couple of special extensions to convert Markdown to HTML that can be used to create the popups and/or phantoms.  It also provides a number of other helpful API commands to aid in creating great tooltips and phantoms.
@@ -18,12 +19,12 @@ Mdpopups will use your color scheme to create popups/phantoms that fit your edit
 
 # Documentation
 
-<http://facelessuser.github.io/sublime-markdown-popups/>
+https://facelessuser.github.io/sublime-markdown-popups
 
 # License
 Released under the MIT license.
 
-Copyright (c) 2015 - 2019 Isaac Muse <isaacmuse@gmail.com>
+Copyright (c) 2015 - 2020 Isaac Muse <isaacmuse@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -31,6 +32,8 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[travis-image]: https://img.shields.io/travis/facelessuser/sublime-markdown-popups/master.svg
-[travis-link]: https://travis-ci.org/facelessuser/sublime-markdown-popups
-[license-image]: https://img.shields.io/badge/license-MIT-blue.svg
+[github-ci-image]: https://github.com/facelessuser/sublime-markdown-popups/workflows/build/badge.svg
+[github-ci-link]: https://github.com/facelessuser/sublime-markdown-popups/actions?workflow=build
+[discord-image]: https://img.shields.io/discord/678289859768745989?logo=discord&logoColor=aaaaaa&color=mediumpurple&labelColor=333333
+[discord-link]: https://discord.gg/rZ2n3Dy
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg?labelColor=333333

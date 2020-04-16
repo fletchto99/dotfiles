@@ -5,7 +5,7 @@ Converts scheme to CSS provides templating for
 additional so that they can access the colors.
 
 Licensed under MIT
-Copyright (c) 2015 - 2016 Isaac Muse <isaacmuse@gmail.com>
+Copyright (c) 2015 - 2020 Isaac Muse <isaacmuse@gmail.com>
 
 ----------------------
 
@@ -30,6 +30,7 @@ NEW_SCHEMES = int(sublime.version()) >= 3150
 INVALID = -1
 POPUP = 0
 PHANTOM = 1
+SHEET = 2
 LUM_MIDPOINT = 127
 
 re_float_trim = re.compile(r'^(?P<keep>\d+)(?P<trash>\.0+|(?P<keep2>\.\d*[1-9])0+)$')
@@ -41,6 +42,8 @@ re_color = re.compile(r'(?<!-)(color\s*:\s*#[A-Fa-z\d]{6})')
 re_bgcolor = re.compile(r'(?<!-)(background(?:-color)?\s*:\s*#[A-Fa-z\d]{6})')
 re_pygments_selectors = re.compile(r'\.dummy (\.[a-zA-Z\d]+) ')
 CODE_BLOCKS = '.mdpopups .highlight, .mdpopups .inline-highlight { %s; %s; }'
+OLD_DEFAULT_CSS = 'Packages/mdpopups/css/default.css'
+DEFAULT_CSS = 'Packages/mdpopups/mdpopups_css/default.css'
 
 
 def fmt_float(f, p=0):
@@ -202,9 +205,13 @@ class SchemeTemplate(object):
             var.update(
                 {
                     'is_phantom': self.css_type == PHANTOM,
-                    'is_popup': self.css_type == POPUP
+                    'is_popup': self.css_type == POPUP,
+                    'is_sheet': self.css_type == SHEET
                 }
             )
+
+            if css == OLD_DEFAULT_CSS:
+                css = DEFAULT_CSS
 
             return self.env.from_string(
                 clean_css(sublime.load_resource(css))
@@ -382,7 +389,7 @@ class SchemeTemplate(object):
 
         self.view = view
 
-        if css_type not in (POPUP, PHANTOM):
+        if css_type not in (POPUP, PHANTOM, SHEET):
             return ''
 
         self.css_type = css_type
@@ -397,7 +404,8 @@ class SchemeTemplate(object):
         var.update(
             {
                 'is_phantom': self.css_type == PHANTOM,
-                'is_popup': self.css_type == POPUP
+                'is_popup': self.css_type == POPUP,
+                'is_sheet': self.css_type == SHEET
             }
         )
 

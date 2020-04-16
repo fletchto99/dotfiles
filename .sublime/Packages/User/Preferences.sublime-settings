@@ -66,10 +66,10 @@
 	],
 	"font_face": "menlo",
 	"font_size": 20,
+	"ignore_vcs_packages": true,
 	"ignored_packages":
 	[
-		"Vintage",
-		"zzz A File Icon zzz"
+		"Vintage"
 	],
 	"ignored_words":
 	[
