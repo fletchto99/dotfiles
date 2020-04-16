@@ -66,15 +66,9 @@
 	],
 	"font_face": "menlo",
 	"font_size": 20,
-	"ignore_vcs_packages": true,
 	"ignored_packages":
 	[
 		"Vintage"
-	],
-	"ignored_words":
-	[
-		"arabic",
-		"endcsname"
 	],
 	"index_exclude_patterns":
 	[
