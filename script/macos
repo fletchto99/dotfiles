@@ -211,7 +211,7 @@ defaults write com.apple.dock dashboard-in-overlay -bool true
 defaults write com.apple.dock mru-spaces -bool false
 
 # Disable auto jumping to focused space
-defaults write com.apple.dock workspaces-auto-swoosh -bool NO
+defaults write com.apple.dock workspaces-auto-swoosh -bool YES
 
 ###############################################################################
 # Safari & WebKit                                                             #
