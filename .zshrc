@@ -52,4 +52,3 @@ if [[ $#h -gt 0 ]]; then
 fi
 
 eval "$(nodenv init -)"
-export PATH="/usr/local/opt/bison/bin:$PATH"
