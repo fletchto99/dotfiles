@@ -1,10 +1,11 @@
 %YAML 1.2
 ---
-# http://www.sublimetext.com/docs/3/syntax.html
 name: UnitTest (JavaScript)
-hidden: true
-file_extensions: ['spec.js', 'test.js']
 scope: source.js.unittest
+hidden: true
+file_extensions:
+  - spec.js
+  - test.js
 contexts:
   main:
     - include: scope:source.js#prototype
