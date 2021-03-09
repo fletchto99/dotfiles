@@ -1,10 +1,10 @@
 %YAML 1.2
 ---
-# http://www.sublimetext.com/docs/3/syntax.html
 name: XML (SVG)
-hidden: true
-file_extensions: ['svg']
 scope: text.xml.svg
+hidden: true
+file_extensions:
+  - svg
 contexts:
   main:
     - include: scope:text.xml#prototype

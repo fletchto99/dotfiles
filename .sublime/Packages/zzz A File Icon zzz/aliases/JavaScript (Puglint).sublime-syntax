@@ -1,10 +1,10 @@
 %YAML 1.2
 ---
-# http://www.sublimetext.com/docs/3/syntax.html
 name: JavaScript (Puglint)
-hidden: true
-file_extensions: ['.pug-lintrc.js']
 scope: source.js.puglint
+hidden: true
+file_extensions:
+  - .pug-lintrc.js
 contexts:
   main:
     - include: scope:source.js#prototype

@@ -33,7 +33,7 @@
 	"debug": false
 	//,"debug_log_file": "C:\\Users\\Username\\Desktop\\sublime_sftp_debug.txt"
 	//,"debug_log_file": "/Users/username/Desktop/sublime_sftp_debug.txt"
-	// ,"debug_log_file": "/Users/mattlanglois/Downloads/debug.txt"
+	//,"debug_log_file": "/home/username/Desktop/sublime_sftp_debug.txt"
 
 	// The command line arguments to open an external diff tool. The local file
 	// path will replace any parameter equal to %1$s and the file path of the
@@ -42,7 +42,7 @@
 	//,"diff_command": ["/usr/bin/meld", "%1$s", "%2$s"]
 	//,"diff_command": ["C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe", "%1$s", "%2$s"]
 	//,"diff_command": ["/usr/bin/opendiff", "%1$s", "%2$s"]
-
+ 
 	// On Windows machines, git and hg are often not in the path and if they
 	// are not in one of the default install locations, their path must be
 	// specified here for the VCS-based commands to work
