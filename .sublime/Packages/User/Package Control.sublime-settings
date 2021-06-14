@@ -32,6 +32,7 @@
 		"Ruby Hash Converter",
 		"SFTP",
 		"SideBarEnhancements",
+		"SSH Config",
 		"sublime-github",
 		"SublimeLinter",
 		"SublimeLinter-rubocop",
@@ -39,10 +40,10 @@
 		"SyntaxHighlightTools",
 		"TabsExtra",
 		"Terminal",
-		"TypeScript Syntax"
+		"TypeScript Syntax",
 	],
 	"repositories":
 	[
 		"https://github.com/titoBouzout/Dictionaries"
-	]
+	],
 }
