@@ -2,6 +2,9 @@ source ~/.exports
 source ~/.aliases
 source ~/.functions
 
+# Homebrew
+HOMEBREW_NO_ENV_FILTERING="true"
+
 # OH MY ZSH
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"

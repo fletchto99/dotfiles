@@ -22,11 +22,11 @@
 	[
 		{
 			"characters": ".",
-			"selector": "source.go"
+			"selector": "source.go",
 		},
 		{
 			"characters": "\\",
-			"selector": "text.tex.latex"
+			"selector": "text.tex.latex",
 		}
 	],
 	"binary_file_patterns":
@@ -65,11 +65,10 @@
 		".git/info/**"
 	],
 	"font_face": "menlo",
-	"font_size": 18,
+	"font_size": 22,
 	"ignored_packages":
 	[
 		"Vintage",
-		"zzz A File Icon zzz"
 	],
 	"index_exclude_patterns":
 	[
@@ -90,5 +89,5 @@
 	"theme": "Default.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
-	"word_wrap": "true"
+	"word_wrap": "true",
 }
