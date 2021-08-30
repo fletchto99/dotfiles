@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # Check if the dotfiles are cloned and if not clone them
 if [ -d "~/.dotfiles" ]; then
     git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
@@ -8,7 +10,7 @@ else
 fi
 
 # Homebrew process
-if ! command -v brew &> /dev/null; then
+# if ! command -v brew &> /dev/null; then
     read -p "Do you wish to install homebrew? " -n 1 -r
     echo
 
@@ -27,7 +29,7 @@ if ! command -v brew &> /dev/null; then
     COUNTER=0
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        (cd ../; brew bundle)
+        (cd ${BOOTSTRAP_DIR}/../; brew bundle)
         ((COUNTER++))
     fi
 
@@ -35,9 +37,9 @@ if ! command -v brew &> /dev/null; then
         echo "Cleanuing up installers...."
         brew cleanup
     fi
-else
-    echo "Homebrew already installed, skipping brew setup"
-fi
+# else
+#     echo "Homebrew already installed, skipping brew setup"
+# fi
 
 # Setup iTerm2 Configs if iTerm2 is installed
 if [ -d "/Applications/iTerm.app/" ]; then
@@ -61,6 +63,7 @@ else
     echo "iTerm not installed, skipping iTerm setup!"
 fi
 
+# Link alfred preferences
 if [ -d "/Applications/Alfred 4.app/" ]; then
     read -p "Do you wish to setup alfred 4 configs? " -n 1 -r
     echo
@@ -79,18 +82,20 @@ else
     echo "Alfred not installed, skipping alfred setup!"
 fi
 
+# Install Oh My Zsh
 read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
+# Link dotfiles
 read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     mkdir -p ~/dotfiles_old
 
-    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_personal" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
+    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
 
     for file in "${files[@]}"
     do
@@ -99,12 +104,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
             rm -f ~/$file
         fi
         ln -s ~/.dotfiles/$file ~/$file
-        source ~/$file
     done
 fi
 
+# Setup apple default preferences
 read -p "Do you wish to setup some Apple defaults? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    /bin/bash macos
+    $BOOTSTRAP_DIR/macos
 fi
