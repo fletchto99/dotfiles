@@ -8,7 +8,8 @@ HOMEBREW_NO_ENV_FILTERING="true"
 # OH MY ZSH
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
-plugins=(git)
+ZSH_DISABLE_COMPFIX=true
+plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # Add tab completion for many Bash commands

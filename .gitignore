@@ -1,8 +1,2 @@
-.gitconfig
-.sublime/Packages/User/Package Control.cache/**
-.sublime/Packages/User/Package Control.last-run
-.sublime/Packages/User/Package Control.merged-ca-bundle
-.sublime/Packages/User/oscrypto-ca-bundle.crt
 .latexcache/
 **/*.crt
-GitHubBuildStatus.sublime-settings

@@ -2,10 +2,10 @@
 
 if [ -d "~/.dotfiles" ]
 then
-	# Clone dotfiles
-	git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
+    # Clone dotfiles
+    git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
 else
-	echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
+    echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
 fi
 
 # Homebrew process
@@ -13,193 +13,129 @@ read -p "Do you wish to install homebrew? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	# Install homebrew
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    # Install homebrew
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-	# Ensure homebrew is up to date
-	brew update
-	brew upgrade
+    # Ensure homebrew is up to date
+    brew update
+    brew upgrade
 fi
 
 if hash brew 2>/dev/null; then
-	read -p "Do you wish to install homebrew defaults? " -n 1 -r
-	echo
+    read -p "Do you wish to install homebrew defaults? " -n 1 -r
+    echo
 
-	COUNTER=0
+    COUNTER=0
 
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		brew bundle ../Brewfile
-		((COUNTER++))
-	fi
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        (cd ../; brew bundle)
+        ((COUNTER++))
+    fi
 
-	if [ "$COUNTER" -gt 0 ]
-	then
-		echo "Cleanuing up installers...."
-		brew cleanup
-	fi
+    if [ "$COUNTER" -gt 0 ]
+    then
+        echo "Cleanuing up installers...."
+        brew cleanup
+    fi
 fi
 
 if [ -d "/Applications/iTerm.app/" ]
 then
-	read -p "Do you wish to setup iTerm configs? " -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		# Backup old iterm configs
+    read -p "Do you wish to setup iTerm configs? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        # Backup old iterm configs
 
-		if [ -d ~/.iterm2 ]
-		then
-			mkdir -p ~/dotfiles_old/.iterm2
-			cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
-			rm -r ~/.iterm2
-		fi
+        if [ -d ~/.iterm2 ]
+        then
+            mkdir -p ~/dotfiles_old/.iterm2
+            cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
+            rm -r ~/.iterm2
+        fi
 
-		# Configure iTerm 2 preferences
-		ln -s  ~/.dotfiles/.iterm2 ~
-		defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
-		defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.iterm2"
-		sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
-	fi
+        # Configure iTerm 2 preferences
+        ln -s  ~/.dotfiles/.iterm2 ~
+        defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+        defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.iterm2"
+        sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
+    fi
 else
-	echo "iTerm not installed, skipping iTerm setup!"
+    echo "iTerm not installed, skipping iTerm setup!"
 fi
 
 if [ -d "/Applications/Alfred 4.app/" ]
 then
-	read -p "Do you wish to setup alfred 4 configs? " -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		# Backup old alfred configs
+    read -p "Do you wish to setup alfred 4 configs? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        # Backup old alfred configs
 
-		if [ -d ~/.alfred ]
-		then
-			mkdir -p ~/dotfiles_old/.alfred
-			cp -r ~/.alfred ~/dotfiles_old/.alfred
-			rm -r ~/.alfred
-		fi
+        if [ -d ~/.alfred ]
+        then
+            mkdir -p ~/dotfiles_old/.alfred
+            cp -r ~/.alfred ~/dotfiles_old/.alfred
+            rm -r ~/.alfred
+        fi
 
-		# Configure Alfred preferences
-		ln -s  ~/.dotfiles/.alfred ~
-	fi
+        # Configure Alfred preferences
+        ln -s  ~/.dotfiles/.alfred ~
+    fi
 else
-	echo "Alfred not installed, skipping alfred setup!"
+    echo "Alfred not installed, skipping alfred setup!"
 fi
 
 read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	# Install some default software
-	curl -L http://install.ohmyz.sh | sh
-fi
-
-if [ -d "/Applications/Sublime Text.app/" ]
-then
-	read -p "Do you wish to setup sublime configs? " -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-
-		#Backup sublime prefs
-		mkdir -p "$HOME/dotfiles_old/sublime/Packages"
-		cp -r "$HOME/Library/Application Support/Sublime Text 3/Packages" "$HOME/dotfiles_old/sublime/Packages"
-		rm -r "$HOME/Library/Application Support/Sublime Text 3/Packages"
-
-		mkdir -p "$HOME/dotfiles_old/sublime/Installed Packages"
-		cp -r "$HOME/Library/Application Support/Sublime Text 3/Installed Packages" "$HOME/dotfiles_old/sublime/Installed Packages"
-		rm -r "$HOME/Library/Application Support/Sublime Text 3/Installed Packages"
-
-		#Remove any old configs sublime
-		if [ -d ~/.sublime ]
-		then
-			rm -r ~/.sublime
-		fi
-
-		#Setup sublime
-		ln -s  ~/.dotfiles/.sublime ~
-
-		ln -s "$HOME/.sublime/Packages" "$HOME/Library/Application Support/Sublime Text 3/"
-		ln -s "$HOME/.sublime/Installed Packages" "$HOME/Library/Application Support/Sublime Text 3/"
-
-		#Add subl command
-		if [ ! -f "$HOME/bin/subl" ]
-		then
-			mkdir -p ~/bin
-			ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
-		fi
-
-		echo "Done setting up sublime! You can now also use 'subl <file>' from the terminal to open a file/directory in sublime"
-	fi
-else
-	echo "Sublime not installed; skipping sublime setup!"
+    # Install some default software
+    curl -L http://install.ohmyz.sh | sh
 fi
 
 read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	mkdir -p ~/dotfiles_old
+    mkdir -p ~/dotfiles_old
 
-	files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
+    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_personal" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
 
-	for file in "${files[@]}"
-	do
-		if [ -f ~/$file ]
-		then
-			cp -L ~/$file ~/dotfiles_old/$file
-			rm -f ~/$file
-		fi
-		ln -s ~/.dotfiles/$file ~/$file
-		source ~/$file
-	done
+    for file in "${files[@]}"
+    do
+        if [ -f ~/$file ]
+        then
+            cp -L ~/$file ~/dotfiles_old/$file
+            rm -f ~/$file
+        fi
+        ln -s ~/.dotfiles/$file ~/$file
+        source ~/$file
+    done
 
-	# Build gitconfig
-	if [ -f '.gitconfig' ]
-	then
-			cp -L ~/.gitconfig ~/dotfiles_old/.gitconfig
-			rm -f ~/.gitconfig
-	fi
-	cp .gitconfig_template .gitconfig
-
-	read -p "What name would you like in your gitconfig: " -e -r
-	sed -i '' "s/#NAME#/$REPLY/g" '.gitconfig'
-
-	read -p "What email would you like in your gitconfig: " -e -r
-	sed -i '' "s/#EMAIL#/$REPLY/g" '.gitconfig'
-
-	read -p "What signing key would you like in your gitconfig: " -e -r
-	sed -i '' "s/#SIGNINGKEY#/$REPLY/g" '.gitconfig'
-
-	read -p "What is your github username: " -e -r
-	sed -i '' "s/#USERNAME#/$REPLY/g" '.gitconfig'
-
-	# Link gitconfig
-	ln -s ~/.dotfiles/.gitconfig ~/.gitconfig
-
-	echo "Please run 'gist --login' after to finish github setup"
+    gist --login
 fi
 
 read -p "Do you wish to setup some Apple defaults? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	chmod +x macos.sh
-	./macos.sh
+    chmod +x macos.sh
+    ./macos.sh
 fi
 
 if [ hash nvm 2>/dev/null ]
 then
-	read -p "Do you wish to setup nodejs? " -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		nvm install node
-		nvm alias default node
-		npm install npm-check-updates -g
-		npm install pm2 -g
-	fi
+    read -p "Do you wish to setup nodejs? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        nvm install node
+        nvm alias default node
+        npm install npm-check-updates -g
+        npm install pm2 -g
+    fi
 else
-	echo "NVM not installed, skipping node setup!"
+    echo "NVM not installed, skipping node setup!"
 fi
