@@ -136,12 +136,3 @@ function tre() {
 function man-preview() {
   man -t "$@" | open -f -a Preview
 }
-
-function build-all-the-things() {
-  if [ $# -eq 0 ]; then
-    echo "Usage: build-all-the-things <num commits>"
-    return
-  fi
-  local numCommits="${@%/}";
-  git log -$numCommits --format=format:%H | tail -n $(($numCommits - 1)) | xargs ~/.dotfiles/script/build-all-the-things
-}

@@ -1,4 +1,0 @@
-[submodule ".sublime/Packages/GitHubBuildStatus"]
-	path = .sublime/Packages/GitHubBuildStatus
-	url = git@github.com:randy3k/GitHubBuildStatus.git
-	branch = master
