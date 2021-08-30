@@ -48,8 +48,8 @@ if [ -d "/Applications/iTerm.app/" ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Backup old iterm configs
         if [ -d ~/.iterm2 ]; then
-            mkdir -p ~/dotfiles_old/.iterm2
-            cp -r ~/.iterm2 ~/dotfiles_old/.iterm2
+            mkdir -p ~/dotfiles_old
+            cp -r ~/.iterm2 ~/dotfiles_old
             rm -r ~/.iterm2
         fi
 
@@ -70,8 +70,8 @@ if [ -d "/Applications/Alfred 4.app/" ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Backup old alfred configs
         if [ -d ~/.alfred ]; then
-            mkdir -p ~/dotfiles_old/.alfred
-            cp -r ~/.alfred ~/dotfiles_old/.alfred
+            mkdir -p ~/dotfiles_old
+            cp -r ~/.alfred ~/dotfiles_old
             rm -r ~/.alfred
         fi
 
@@ -107,8 +107,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     # Specialcase SSH configs
     if [ -d ~/.ssh ]; then
-        mkdir -p ~/dotfiles_old/.ssh
-        cp -r ~/.ssh ~/dotfiles_old/.ssh
+        mkdir -p ~/dotfiles_old
+        cp -r ~/.ssh ~/dotfiles_old
         rm -r ~/.ssh
         mkdir -p ~/.ssh
     fi
