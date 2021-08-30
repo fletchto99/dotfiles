@@ -29,7 +29,7 @@ fi
     COUNTER=0
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        (cd ${BOOTSTRAP_DIR}/../; brew bundle)
+        brew bundle --file=~/.dotfile/Brewfile
         ((COUNTER++))
     fi
 
