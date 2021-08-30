@@ -3,10 +3,10 @@
 BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Check if the dotfiles are cloned and if not clone them
-if [ -d "~/.dotfiles" ]; then
-    git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
-else
+if [ -d ~/.dotfiles/ ]; then
     echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
+else
+    git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
 fi
 
 # Homebrew process
