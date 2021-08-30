@@ -1,2 +1,3 @@
 .latexcache/
 **/*.crt
+**/id_*
