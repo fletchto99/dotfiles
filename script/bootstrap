@@ -29,7 +29,7 @@ fi
     COUNTER=0
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        brew bundle --file=~/.dotfile/Brewfile
+        brew bundle --file=~/.dotfiles/Brewfile
         ((COUNTER++))
     fi
 
