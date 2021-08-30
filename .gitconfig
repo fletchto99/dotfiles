@@ -12,7 +12,7 @@
   signingkey = 6ECE58EECF6F8378
 
 [includeIf "gitdir:~/programming/work/"]
-  path = .gitconfig-professional
+  path = .gitconfig_work
 
 [github]
   user = fletchto99
