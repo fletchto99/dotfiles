@@ -97,13 +97,24 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
 
-    for file in "${files[@]}"
-    do
+    for file in "${files[@]}"; do
         if [ -f ~/$file ]; then
             cp -L ~/$file ~/dotfiles_old/$file
             rm -f ~/$file
         fi
         ln -s ~/.dotfiles/$file ~/$file
+    done
+
+    # Specialcase SSH configs
+    if [ -d ~/.ssh ]; then
+        mkdir -p ~/dotfiles_old/.ssh
+        cp -r ~/.ssh ~/dotfiles_old/.ssh
+        rm -r ~/.ssh
+        mkdir -p ~/.ssh
+    fi
+
+    for file in ~/.dotfiles/.ssh/*; do
+        ln -s $file ~/.ssh/$(basename $file)
     done
 fi
 
