@@ -110,8 +110,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         mkdir -p ~/dotfiles_old
         cp -r ~/.ssh ~/dotfiles_old
         rm -r ~/.ssh
-        mkdir -p ~/.ssh
+
     fi
+
+    mkdir -p ~/.ssh
 
     for file in ~/.dotfiles/.ssh/*; do
         ln -s $file ~/.ssh/$(basename $file)
