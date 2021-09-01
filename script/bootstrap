@@ -105,19 +105,29 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         ln -s ~/.dotfiles/$file ~/$file
     done
 
-    # Specialcase SSH configs
-    if [ -d ~/.ssh ]; then
-        mkdir -p ~/dotfiles_old
-        cp -r ~/.ssh ~/dotfiles_old
-        rm -r ~/.ssh
-
-    fi
-
+    # Special case .ssh
     mkdir -p ~/.ssh
-
     for file in ~/.dotfiles/.ssh/*; do
+        if [ -f ~/.ssh/$(basename $file) ]; then
+            mkdir -p ~/dotfiles_old/.ssh
+            cp ~/.ssh/$(basename $file) ~/dotfiles_old/.ssh/$(basename $file)
+            rm -f ~/.ssh/$(basename $file)
+        fi
         ln -s $file ~/.ssh/$(basename $file)
     done
+
+    # Special case .gpg
+    mkdir -p ~/.gnupg
+    for file in ~/.dotfiles/.gnupg/*; do
+        if [ -f ~/.gnupg/$(basename $file) ]; then
+            mkdir -p ~/dotfiles_old/.gnupg
+            cp ~/.gnupg/$(basename $file) ~/dotfiles_old/.gnupg/$(basename $file)
+            rm -f ~/.gnupg/$(basename $file)
+        fi
+        ln -s $file ~/.gnupg/$(basename $file)
+    done
+
+    gpgconf --kill gpg-agent
 fi
 
 # Setup apple default preferences
