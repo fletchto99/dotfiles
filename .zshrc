@@ -9,7 +9,11 @@ HOMEBREW_NO_ENV_FILTERING="true"
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 ZSH_DISABLE_COMPFIX=true
-plugins=(git zsh-autosuggestions)
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+  plugins=(git zsh-autosuggestions)
+else
+  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 source $ZSH/oh-my-zsh.sh
 
 # Add tab completion for many Bash commands
