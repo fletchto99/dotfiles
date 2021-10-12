@@ -9,11 +9,7 @@ HOMEBREW_NO_ENV_FILTERING="true"
 ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 ZSH_DISABLE_COMPFIX=true
-if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-  plugins=(git zsh-autosuggestions)
-else
-  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # Fix for crtl+M when pressing enter
