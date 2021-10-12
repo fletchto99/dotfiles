@@ -17,12 +17,12 @@
 [includeIf "gitdir:/workspaces/"]
   path = .gitconfig_work
 
+[includeIf "gitdir:/Users"]
+  path = .gitconfig_macos
+
 [github]
   user = fletchto99
   shelluser = matt
-
-[credential]
-  helper = osxkeychain
 
 [protocol]
   version = 2
