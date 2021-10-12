@@ -2,23 +2,20 @@
   excludesfile = ~/.gitignore_global
   untrackedCache = true
 
-  # Make `git rebase` safer on macOS
-  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-  trustctime = false
-
-[gpg]
-    program = gpg
-
 [user]
   name = Matt Langlois
-  email = fletchto99@gmail.com
-  signingkey = 6ECE58EECF6F8378
 
 [includeIf "gitdir:/workspaces/"]
-  path = .gitconfig_work
+  path = .gitconfig_codespaces
 
-[includeIf "gitdir:/Users"]
+[includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
+
+[includeIf "gitdir:/Users/"]
+  path = .gitconfig_macos_personal
+
+[includeIf "gitdir:/programming/work/"]
+  path = .gitconfig_macos_work
 
 [github]
   user = fletchto99
@@ -54,28 +51,16 @@
   branch = magenta
 
 [diff]
-  tool = Kaleidoscope
   renames = copies
 
 [diff "bin"]
-  # Use `hexdump` to diff binary files
   textconv = hexdump -v -C
 
 [difftool]
   prompt = false
 
-[difftool "Kaleidoscope"]
-    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-
-[merge]
-  tool = Kaleidoscope
-
 [mergetool]
   prompt = false
-
-[mergetool "Kaleidoscope"]
-    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-    trustExitCode = true
 
 [push]
   default = simple
