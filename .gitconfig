@@ -27,6 +27,13 @@
 [fetch]
   prune = true
 
+[push]
+  default = simple
+  followTags = true
+
+[pull]
+  rebase = true
+
 [commit]
   gpgsign = true
 
@@ -61,10 +68,6 @@
 
 [mergetool]
   prompt = false
-
-[push]
-  default = simple
-  followTags = true
 
 [alias]
     # Lol for when I forget
