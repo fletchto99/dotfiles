@@ -138,7 +138,7 @@ else
     echo "Linking dotfiles"
     mkdir -p ~/dotfiles_old
 
-    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
+    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitconfig_macos" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
 
     for file in "${files[@]}"; do
         if [ -f ~/$file ]; then
