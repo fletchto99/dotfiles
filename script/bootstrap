@@ -10,6 +10,7 @@ else
 fi
 
 # Homebrew process
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 # if ! command -v brew &> /dev/null; then
     read -p "Do you wish to install homebrew? " -n 1 -r
     echo
@@ -40,6 +41,7 @@ fi
 # else
 #     echo "Homebrew already installed, skipping brew setup"
 # fi
+fi
 
 # Setup iTerm2 Configs if iTerm2 is installed
 if [ -d "/Applications/iTerm.app/" ]; then
@@ -83,16 +85,56 @@ else
 fi
 
 # Install Oh My Zsh
-read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    /bin/bash -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        /bin/bash -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    fi
 fi
 
 # Link dotfiles
-read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        mkdir -p ~/dotfiles_old
+
+        files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
+
+        for file in "${files[@]}"; do
+            if [ -f ~/$file ]; then
+                cp -L ~/$file ~/dotfiles_old/$file
+                rm -f ~/$file
+            fi
+            ln -s ~/.dotfiles/$file ~/$file
+        done
+
+        # Special case .ssh
+        mkdir -p ~/.ssh
+        for file in ~/.dotfiles/.ssh/*; do
+            if [ -f ~/.ssh/$(basename $file) ]; then
+                mkdir -p ~/dotfiles_old/.ssh
+                cp ~/.ssh/$(basename $file) ~/dotfiles_old/.ssh/$(basename $file)
+                rm -f ~/.ssh/$(basename $file)
+            fi
+            ln -s $file ~/.ssh/$(basename $file)
+        done
+
+        # Special case .gpg
+        mkdir -p ~/.gnupg
+        for file in ~/.dotfiles/.gnupg/*; do
+            if [ -f ~/.gnupg/$(basename $file) ]; then
+                mkdir -p ~/dotfiles_old/.gnupg
+                cp ~/.gnupg/$(basename $file) ~/dotfiles_old/.gnupg/$(basename $file)
+                rm -f ~/.gnupg/$(basename $file)
+            fi
+            ln -s $file ~/.gnupg/$(basename $file)
+        done
+
+        gpgconf --kill gpg-agent
+    fi
+else
     mkdir -p ~/dotfiles_old
 
     files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc")
@@ -104,35 +146,13 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         fi
         ln -s ~/.dotfiles/$file ~/$file
     done
-
-    # Special case .ssh
-    mkdir -p ~/.ssh
-    for file in ~/.dotfiles/.ssh/*; do
-        if [ -f ~/.ssh/$(basename $file) ]; then
-            mkdir -p ~/dotfiles_old/.ssh
-            cp ~/.ssh/$(basename $file) ~/dotfiles_old/.ssh/$(basename $file)
-            rm -f ~/.ssh/$(basename $file)
-        fi
-        ln -s $file ~/.ssh/$(basename $file)
-    done
-
-    # Special case .gpg
-    mkdir -p ~/.gnupg
-    for file in ~/.dotfiles/.gnupg/*; do
-        if [ -f ~/.gnupg/$(basename $file) ]; then
-            mkdir -p ~/dotfiles_old/.gnupg
-            cp ~/.gnupg/$(basename $file) ~/dotfiles_old/.gnupg/$(basename $file)
-            rm -f ~/.gnupg/$(basename $file)
-        fi
-        ln -s $file ~/.gnupg/$(basename $file)
-    done
-
-    gpgconf --kill gpg-agent
 fi
 
 # Setup apple default preferences
-read -p "Do you wish to setup some Apple defaults? " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    $BOOTSTRAP_DIR/macos
+if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+    read -p "Do you wish to setup some Apple defaults? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        $BOOTSTRAP_DIR/macos
+    fi
 fi
