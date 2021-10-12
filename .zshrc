@@ -16,18 +16,19 @@ else
 fi
 source $ZSH/oh-my-zsh.sh
 
-# Add tab completion for many Bash commands
-if which brew &> /dev/null && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
-  source "$(brew --prefix)/share/bash-completion/bash_completion";
-elif [ -f /etc/bash_completion ]; then
-  source /etc/bash_completion;
-fi;
-
 # Fix for crtl+M when pressing enter
 stty sane
 
 # Codespaces we dont want this
-if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+  if [[ "$OSTYPE" != "linux-gnu"* ]]; then
+  # Add tab completion for many Bash commands
+  if which brew &> /dev/null && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
+    source "$(brew --prefix)/share/bash-completion/bash_completion";
+  elif [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion;
+  fi;
+
+
   # Speed up loading nvm thanks to https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
   # Add every binary that requires nvm, npm or node to run to an array of node globals
   NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
