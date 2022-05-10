@@ -11,7 +11,6 @@ fi
 
 # Homebrew process
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-# if ! command -v brew &> /dev/null; then
     read -p "Do you wish to install homebrew? " -n 1 -r
     echo
 
@@ -38,9 +37,9 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
         echo "Cleanuing up installers...."
         brew cleanup
     fi
-# else
-#     echo "Homebrew already installed, skipping brew setup"
-# fi
+else
+    apt install zsh
+    chsh -s $(which zsh)
 fi
 
 # Setup iTerm2 Configs if iTerm2 is installed
