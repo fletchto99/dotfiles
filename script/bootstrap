@@ -38,7 +38,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
         brew cleanup
     fi
 else
-    apt install zsh
+    apt install zsh -y
     chsh -s $(which zsh)
 fi
 
