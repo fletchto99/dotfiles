@@ -4,14 +4,14 @@ BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Check if the dotfiles are cloned and if not clone them
 if [ -d ~/.dotfiles/ ]; then
-    echo "~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
+    echo "[dotfiles] ~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
 else
     git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
 fi
 
 # Homebrew process
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-    read -p "Do you wish to install homebrew? " -n 1 -r
+    read -p "[dotfiles] Do you wish to install homebrew? " -n 1 -r
     echo
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -23,7 +23,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
         brew upgrade
     fi
 
-    read -p "Do you wish to install homebrew defaults? " -n 1 -r
+    read -p "[dotfiles] Do you wish to install homebrew defaults? " -n 1 -r
     echo
 
     COUNTER=0
@@ -34,17 +34,22 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     fi
 
     if [ "$COUNTER" -gt 0 ]; then
-        echo "Cleanuing up installers...."
+        echo "[dotfiles] Cleanuing up installers...."
         brew cleanup
     fi
 else
-    apt install -o Dpkg::Options::="--force-confold" --force-yes -y zsh
-    chsh -s $(which zsh)
+    if ! [ -x "$(command -v zsh)" ]; then
+        echo "[dotfiles] Installing ZSH"
+        sudo apt install -o Dpkg::Options::="--force-confold" --force-yes -y zsh
+        sudo chsh -s $(which zsh)
+    else
+        echo "[dotfiles] ZSH already installed"
+    fi
 fi
 
 # Setup iTerm2 Configs if iTerm2 is installed
 if [ -d "/Applications/iTerm.app/" ]; then
-    read -p "Do you wish to setup iTerm configs? " -n 1 -r
+    read -p "[dotfiles] Do you wish to setup iTerm configs? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Backup old iterm configs
@@ -61,7 +66,7 @@ if [ -d "/Applications/iTerm.app/" ]; then
         sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
     fi
 else
-    echo "iTerm not installed, skipping iTerm setup!"
+    echo "[dotfiles] iTerm not installed, skipping iTerm setup!"
 fi
 
 # Link alfred preferences
@@ -80,23 +85,24 @@ if [ -d "/Applications/Alfred 4.app/" ]; then
         ln -s  ~/.dotfiles/.alfred ~
     fi
 else
-    echo "Alfred not installed, skipping alfred setup!"
+    echo "[dotfiles] Alfred not installed, skipping alfred setup!"
 fi
 
 # Install Oh My Zsh
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-    read -p "Do you wish to install Oh-My-ZSH? " -n 1 -r
+    read -p "[dotfiles] Do you wish to install Oh-My-ZSH? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         /bin/bash -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 else
+    echo "[dotfiles] Installing oh my zsh"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 # Link dotfiles
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-    read -p "Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
+    read -p "[dotfiles] Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         mkdir -p ~/dotfiles_old
@@ -136,7 +142,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
         gpgconf --kill gpg-agent
     fi
 else
-    echo "Linking dotfiles"
+    echo "[dotfiles] Linking dotfiles"
     mkdir -p ~/dotfiles_old
 
     files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_codespaces" ".gitconfig_macos" ".gitconfig_macos_personal" ".gitconfig_macos_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
@@ -148,14 +154,18 @@ else
         fi
         ln -s ~/.dotfiles/$file ~/$file
     done
+
+    echo "[dotfiles] Setting up auto-suggestions"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
 # Setup apple default preferences
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-    read -p "Do you wish to setup some Apple defaults? " -n 1 -r
+    read -p "[dotfiles] Do you wish to setup some Apple defaults? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         $BOOTSTRAP_DIR/macos
     fi
 fi
+
+echo "[dotfiles] Finished setting up dotfiles..."
