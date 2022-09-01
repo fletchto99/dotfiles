@@ -1,5 +1,2 @@
-[user]
-  signingkey = 6ECE58EECF6F8378
-
 [includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
   path = .gitconfig_codespaces_work
