@@ -5,13 +5,15 @@
 [user]
   name = Matt Langlois
   email = fletchto99@gmail.com
-  signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
 
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 
-[includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
-  path = .gitconfig_work
+[includeIf "gitdir:/workspaces/"]
+  path = .gitconfig_codespaces
+
+[commit]
+  gpgsign = true
 
 [github]
   user = fletchto99
@@ -28,12 +30,6 @@
 
 [pull]
   rebase = true
-
-[commit]
-  gpgsign = true
-
-[gpg]
-  format = ssh
 
 [color]
   ui = true
