@@ -107,7 +107,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         mkdir -p ~/dotfiles_old
 
-        files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_codespaces" ".gitconfig_macos" ".gitconfig_macos_personal" ".gitconfig_macos_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
+        files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_codespaces" ".gitconfig_codespaces_work" ".gitconfig_macos" ".gitconfig_macos_work" ".gitconfig_macos_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
 
         for file in "${files[@]}"; do
             if [ -f ~/$file ]; then
