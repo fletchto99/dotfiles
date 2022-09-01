@@ -2,15 +2,15 @@
   excludesfile = ~/.gitignore_global
   untrackedCache = true
 
-[user]
-  name = Matt Langlois
-  email = fletchto99@gmail.com
-
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 
 [includeIf "gitdir:/workspaces/"]
   path = .gitconfig_codespaces
+
+[user]
+  name = Matt Langlois
+  email = fletchto99@gmail.com
 
 [commit]
   gpgsign = true
