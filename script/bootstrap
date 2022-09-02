@@ -5,7 +5,7 @@ BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 files=()
 while IFS=  read -r -d $'\0'; do
     files+=("$REPLY")
-done < <(find ../ -maxdepth 1 -name ".*" -type f -printf "%P\0")
+done < <(find ~/.dotfiles/ -maxdepth 1 -name ".*" -type f -printf "%P\0")
 
 # Check if the dotfiles are cloned and if not clone them
 if [ -d ~/.dotfiles/ ]; then
