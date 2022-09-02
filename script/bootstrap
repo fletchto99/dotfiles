@@ -4,8 +4,10 @@ BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 files=()
 while IFS=  read -r -d $'\0'; do
-    files+=("$REPLY")
-done < <(find ~/.dotfiles/ -maxdepth 1 -name ".*" -type f -printf "%P\0")
+    files+=($(basename "$REPLY"))
+done < <(find ~/.dotfiles/ -maxdepth 1 -name ".*" -type f -print0)
+
+echo "${files[@]}"
 
 # Check if the dotfiles are cloned and if not clone them
 if [ -d ~/.dotfiles/ ]; then
@@ -76,7 +78,7 @@ fi
 
 # Link alfred preferences
 if [ -d "/Applications/Alfred 4.app/" ]; then
-    read -p "Do you wish to setup alfred 4 configs? " -n 1 -r
+    read -p "[dotfiles] Do you wish to setup alfred 4 configs? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Backup old alfred configs
