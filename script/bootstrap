@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
+files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_macos" ".gitconfig_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
 
 # Check if the dotfiles are cloned and if not clone them
 if [ -d ~/.dotfiles/ ]; then
@@ -107,8 +108,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         mkdir -p ~/dotfiles_old
 
-        files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_codespaces" ".gitconfig_codespaces_work" ".gitconfig_macos" ".gitconfig_macos_work" ".gitconfig_macos_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
-
         for file in "${files[@]}"; do
             if [ -f ~/$file ]; then
                 cp -L ~/$file ~/dotfiles_old/$file
@@ -144,8 +143,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 else
     echo "[dotfiles] Linking dotfiles"
     mkdir -p ~/dotfiles_old
-
-    files=( ".aliases" ".curlrc" ".editorconfig" ".exports" ".functions" ".gdbinit" ".gitconfig" ".gitconfig_codespaces" ".gitconfig_codespaces_work" ".gitconfig_macos" ".gitconfig_macos_work" ".gitignore_global" ".inputrc" ".screenrc" ".wgetrc" ".zshrc" )
 
     for file in "${files[@]}"; do
         if [ -f ~/$file ]; then

@@ -3,9 +3,6 @@
   # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
   trustctime = false
 
-[includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
-  path = .gitconfig_macos_work
-
 [user]
   signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
 
