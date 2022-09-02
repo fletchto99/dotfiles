@@ -2,13 +2,6 @@
 
 BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-files=()
-while IFS=  read -r -d $'\0'; do
-    files+=($(basename "$REPLY"))
-done < <(find ~/.dotfiles/ -maxdepth 1 -name ".*" -type f -print0)
-
-echo "${files[@]}"
-
 # Check if the dotfiles are cloned and if not clone them
 if [ -d ~/.dotfiles/ ]; then
     echo "[dotfiles] ~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
@@ -107,12 +100,19 @@ else
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
+files=()
+while IFS=  read -r -d $'\0'; do
+    files+=($(basename "$REPLY"))
+done < <(find ~/.dotfiles/ -maxdepth 1 -name ".*" -type f -print0)
+
 # Link dotfiles
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     read -p "[dotfiles] Do you wish to link your dotfiles? (old ones will be backed up to ~/dotfiles_old) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         mkdir -p ~/dotfiles_old
+
+        echo "[dotfiles] Linking dotfiles (${files[@]})"
 
         for file in "${files[@]}"; do
             if [ -f ~/$file ]; then
@@ -147,7 +147,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
         gpgconf --kill gpg-agent
     fi
 else
-    echo "[dotfiles] Linking dotfiles"
+    echo "[dotfiles] Linking dotfiles (${files[@]})"
     mkdir -p ~/dotfiles_old
 
     for file in "${files[@]}"; do
