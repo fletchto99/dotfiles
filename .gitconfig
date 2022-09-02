@@ -1,12 +1,12 @@
-[core]
-  excludesfile = ~/.gitignore_global
-  untrackedCache = true
-
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 
-[includeIf "gitdir:/workspaces/"]
-  path = .gitconfig_codespaces
+[includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
+  path = .gitconfig_work
+
+[core]
+  excludesfile = ~/.gitignore_global
+  untrackedCache = true
 
 [user]
   name = Matt Langlois
