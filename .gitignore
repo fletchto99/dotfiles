@@ -1,3 +1,4 @@
 .latexcache/
 **/*.crt
 **/id_*
+Brewfile.lock.json
