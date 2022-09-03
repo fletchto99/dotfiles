@@ -1,9 +1,3 @@
-[includeIf "gitdir:/Users/"]
-  path = .gitconfig_macos
-
-[includeIf "hasconfig:remote.*.url:*github.com/github/**"]
-  path = .gitconfig_work
-
 [core]
   excludesfile = ~/.gitignore_global
   untrackedCache = true
@@ -127,3 +121,12 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+
+[includeIf "gitdir:/Users/"]
+  path = .gitconfig_macos
+
+[includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
+  path = .gitconfig_work
+
+[includeIf "hasconfig:remote.*.url:git@github.com:github/**"]
+  path = .gitconfig_work
