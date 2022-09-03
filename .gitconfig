@@ -1,7 +1,7 @@
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 
-[includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
+[includeIf "hasconfig:remote.*.url:*github.com/github/**"]
   path = .gitconfig_work
 
 [core]
