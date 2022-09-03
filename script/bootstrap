@@ -30,6 +30,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         brew bundle --file=~/.dotfiles/Brewfile
+        brew autoupdate start
         ((COUNTER++))
     fi
 
