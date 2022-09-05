@@ -1,5 +1,36 @@
 #!/usr/bin/env bash
 
+vercomp () {
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
+
 BOOTSTRAP_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Check if the dotfiles are cloned and if not clone them
@@ -7,6 +38,23 @@ if [ -d ~/.dotfiles/ ]; then
     echo "[dotfiles] ~/.dotfiles directory already exists! Make sure to git pull to ensure it is up to date"
 else
     git clone https://github.com/fletchto99/dotfiles.git ~/.dotfiles
+fi
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    vercomp "$(git --version | sed 's/[^0-9\.]*//g')" "2.36.0"
+    if [[ $? == 2 ]]; then
+        echo "[dotfiles] Installing latest git from source"
+        $(git clone https://github.com/git/git .core-git &&
+        cd .core-git &&
+        apt-get update &&
+        apt-get install git gcc make libssl-dev libcurl4-openssl-dev \
+                            libexpat-dev tcl tk gettext git-email zlib1g-dev \
+                            checkinstall &&
+        printf '%s\n' prefix=/usr gitexecdir=/usr/lib/git-core NO_TCLTK=1 >>config.mak &&
+        make -j8 &&
+        eval "$(tr -d ' ' <GIT-VERSION-FILE)" &&
+        checkinstall -y --pkgname=git --pkgversion=2:$GIT_VERSION --provides=git,\ git-man,\ git-email --replaces=git,\ git-man,\ git-email make -j8 install)
+    fi
 fi
 
 # Homebrew process
