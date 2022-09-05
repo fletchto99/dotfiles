@@ -44,16 +44,13 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     vercomp "$(git --version | sed 's/[^0-9\.]*//g')" "2.36.0"
     if [[ $? == 2 ]]; then
         echo "[dotfiles] Installing latest git from source"
-        $(git clone https://github.com/git/git .core-git &&
-        cd .core-git &&
-        suod apt-get update &&
-        sudo apt-get install git gcc make libssl-dev libcurl4-openssl-dev \
-                            libexpat-dev tcl tk gettext git-email zlib1g-dev \
-                            checkinstall &&
+        $(git clone https://github.com/git/git ~/.core-git &&
+        cd ~/.core-git &&
+        sudo apt-get update &&
+        sudo apt-get install -y git gcc make libssl-dev libcurl4-openssl-dev \
+                            libexpat-dev tcl tk gettext git-email zlib1g-dev &&
         printf '%s\n' prefix=/usr gitexecdir=/usr/lib/git-core NO_TCLTK=1 >>config.mak &&
-        make -j8 &&
-        eval "$(tr -d ' ' <GIT-VERSION-FILE)" &&
-        checkinstall -y --pkgname=git --pkgversion=2:$GIT_VERSION --provides=git,\ git-man,\ git-email --replaces=git,\ git-man,\ git-email make -j8 install)
+        sudo make -j8 && sudo make -j8 install)
     fi
 fi
 
