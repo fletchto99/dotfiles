@@ -46,8 +46,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "[dotfiles] Installing latest git from source"
         $(git clone https://github.com/git/git .core-git &&
         cd .core-git &&
-        apt-get update &&
-        apt-get install git gcc make libssl-dev libcurl4-openssl-dev \
+        suod apt-get update &&
+        sudo apt-get install git gcc make libssl-dev libcurl4-openssl-dev \
                             libexpat-dev tcl tk gettext git-email zlib1g-dev \
                             checkinstall &&
         printf '%s\n' prefix=/usr gitexecdir=/usr/lib/git-core NO_TCLTK=1 >>config.mak &&
