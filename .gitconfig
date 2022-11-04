@@ -50,15 +50,20 @@
   renames = copies
   tool = vscode
 
+[difftool]
+  prompt = false
+
 [diff "bin"]
   textconv = hexdump -v -C
 
 [difftool "vscode"]
   cmd = code --wait --diff $LOCAL $REMOTE
-  prompt = false
 
 [merge]
   tool = vscode
+
+[mergetool]
+  prompt = false
 
 [mergetool "vscode"]
   cmd = code --wait $MERGED
