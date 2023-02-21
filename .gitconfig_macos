@@ -1,16 +1,29 @@
 [core]
-  # Make `git rebase` safer on macOS
-  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-  trustctime = false
+# Make `git rebase` safer on macOS
+# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+trustctime = false
+editor = code --wait
 
 [user]
-  signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
+signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
 
 [gpg]
-  format = ssh
+format = ssh
 
 [gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [credential]
-  helper = osxkeychain
+helper = osxkeychain
+
+[diff]
+tool = vscode
+
+[merge]
+tool = vscode
+
+[difftool "vscode"]
+cmd = code --wait --diff $LOCAL $REMOTE
+
+[mergetool "vscode"]
+cmd = code --wait --diff $LOCAL $REMOTE
