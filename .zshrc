@@ -42,9 +42,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
   done
 
-  # Init the Ruby env
-  eval "$(rbenv init -)"
-
   # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
   h=()
   if [[ -r ~/.ssh/config ]]; then
