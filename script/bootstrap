@@ -178,19 +178,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
             fi
             ln -s $file ~/.ssh/$(basename $file)
         done
-
-        # Special case .gpg
-        mkdir -p ~/.gnupg
-        for file in ~/.dotfiles/.gnupg/*; do
-            if [ -f ~/.gnupg/$(basename $file) ]; then
-                mkdir -p ~/dotfiles_old/.gnupg
-                cp ~/.gnupg/$(basename $file) ~/dotfiles_old/.gnupg/$(basename $file)
-                rm -f ~/.gnupg/$(basename $file)
-            fi
-            ln -s $file ~/.gnupg/$(basename $file)
-        done
-
-        gpgconf --kill gpg-agent
     fi
 else
     echo "[dotfiles] Linking dotfiles (${files[@]})"
