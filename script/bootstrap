@@ -116,8 +116,8 @@ else
 fi
 
 # Link alfred preferences
-if [ -d "/Applications/Alfred 4.app/" ]; then
-    read -p "[dotfiles] Do you wish to setup alfred 4 configs? " -n 1 -r
+if [ -d "/Applications/Alfred 5.app/" ]; then
+    read -p "[dotfiles] Do you wish to setup alfred 5 configs? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Backup old alfred configs
@@ -193,15 +193,6 @@ else
 
     echo "[dotfiles] Setting up auto-suggestions"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-
-# Setup apple default preferences
-if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-    read -p "[dotfiles] Do you wish to setup some Apple defaults? " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        $BOOTSTRAP_DIR/macos
-    fi
 fi
 
 echo "[dotfiles] Finished setting up dotfiles..."
