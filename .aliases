@@ -45,3 +45,6 @@ alias path='echo -e ${PATH//:/\\n}'
 
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
+
+# Alias "code" to "code-insiders"
+alias code='code-insiders'
