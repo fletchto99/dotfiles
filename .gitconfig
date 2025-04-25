@@ -1,7 +1,7 @@
 [core]
   excludesfile = ~/.gitignore_global
   untrackedCache = true
-  editor = code --wait
+  editor = code-insiders --wait
 
 [user]
   name = Matt Langlois

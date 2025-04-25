@@ -57,3 +57,4 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 
   eval "$(nodenv init -)"
 fi
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
