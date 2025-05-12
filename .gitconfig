@@ -58,7 +58,7 @@
   textconv = hexdump -v -C
 
 [difftool "vscode"]
-  cmd = code --wait --diff $LOCAL $REMOTE
+  cmd = code-insiders --wait --diff $LOCAL $REMOTE
 
 [merge]
   tool = vscode
@@ -67,7 +67,7 @@
   prompt = false
 
 [mergetool "vscode"]
-  cmd = code --wait $MERGED
+  cmd = code-insiders --wait $MERGED
 
 [alias]
   # Lol for when I forget

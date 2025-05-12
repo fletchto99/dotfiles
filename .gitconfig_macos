@@ -2,7 +2,7 @@
 # Make `git rebase` safer on macOS
 # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
 trustctime = false
-editor = code --wait
+editor = code-insiders --wait
 
 [user]
 signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
@@ -23,7 +23,7 @@ tool = vscode
 tool = vscode
 
 [difftool "vscode"]
-cmd = code --wait --diff $LOCAL $REMOTE
+cmd = code-insiders --wait --diff $LOCAL $REMOTE
 
 [mergetool "vscode"]
-cmd = code --wait --diff $LOCAL $REMOTE
+cmd = code-insiders --wait --diff $LOCAL $REMOTE
