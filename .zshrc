@@ -57,3 +57,6 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 
   eval "$(nodenv init -)"
 fi
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
