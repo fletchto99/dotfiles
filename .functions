@@ -5,45 +5,6 @@ function mkd() {
   mkdir -p "$@" && cd "$_";
 }
 
-# Change working directory to the top-most Finder window location
-function cdf() { # short for `cdfinder`
-  cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')";
-}
-
-# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
-function targz() {
-  local tmpFile="${@%/}.tar";
-  tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
-
-  size=$(
-    stat -f"%z" "${tmpFile}" 2> /dev/null; # macOS `stat`
-    stat -c"%s" "${tmpFile}" 2> /dev/null;  # GNU `stat`
-  );
-
-  local cmd="";
-  if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
-    # the .tar file is smaller than 50 MB and Zopfli is available; use it
-    cmd="zopfli";
-  else
-    if hash pigz 2> /dev/null; then
-      cmd="pigz";
-    else
-      cmd="gzip";
-    fi;
-  fi;
-
-  echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`…";
-  "${cmd}" -v "${tmpFile}" || return 1;
-  [ -f "${tmpFile}" ] && rm "${tmpFile}";
-
-  zippedSize=$(
-    stat -f"%z" "${tmpFile}.gz" 2> /dev/null; # macOS `stat`
-    stat -c"%s" "${tmpFile}.gz" 2> /dev/null; # GNU `stat`
-  );
-
-  echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully.";
-}
-
 # Determine size of a file or total size of a directory
 function fs() {
   if du -b /dev/null > /dev/null 2>&1; then
@@ -58,31 +19,14 @@ function fs() {
   fi;
 }
 
-# Create a data URL from a file
-function dataurl() {
-  local mimeType=$(file -b --mime-type "$1");
-  if [[ $mimeType == text/* ]]; then
-    mimeType="${mimeType};charset=utf-8";
-  fi
-  echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
-}
-
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
   local port="${1:-8000}";
   sleep 1 && open "http://localhost:${port}/" &
-  # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-  # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
-  python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port";
-}
-
-# Compare original and gzipped file size
-function gz() {
-  local origsize=$(wc -c < "$1");
-  local gzipsize=$(gzip -c "$1" | wc -c);
-  local ratio=$(echo "$gzipsize * 100 / $origsize" | bc -l);
-  printf "orig: %d bytes\n" "$origsize";
-  printf "gzip: %d bytes (%2.2f%%)\n" "$gzipsize" "$ratio";
+  # Python 3's http.server replaces the (Python-2-only) SimpleHTTPServer used in the older
+  # version of this function. --bind 127.0.0.1 keeps the server local rather than binding to all
+  # interfaces; drop that flag if you need LAN access.
+  python3 -m http.server --bind 127.0.0.1 "${port}";
 }
 
 # Run `dig` and display the most useful info
@@ -124,15 +68,32 @@ function certinfo() {
   fi;
 }
 
-# `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
-# the `.git` directory, listing directories first. The output gets piped into
-# `less` with options to preserve color and line numbers, unless the output is
-# small enough for one screen.
-function tre() {
-  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
-}
-
-# Display the man-page as a pdf in preview
-function man-preview() {
-  man -t "$@" | open -f -a Preview
+# Find stale transitive Homebrew dependencies that `brew autoremove` misses.
+# These are formulae that:
+#   1. are currently leaves (nothing installed depends on them)
+#   2. were originally installed as a dependency (not via `brew install`)
+#   3. whose parent formula's current version no longer requires them
+# autoremove sometimes leaves these behind when a parent's deps shift between
+# versions. Run periodically; safe to `brew uninstall` everything this lists.
+function brew-stale-deps() {
+  local f short receipt on_req as_dep
+  # `setopt -s null_glob` makes zsh return empty for no-match globs instead of
+  # erroring; bash uses `shopt -s nullglob`. Local to the function via subshell.
+  (
+    setopt null_glob 2>/dev/null || shopt -s nullglob 2>/dev/null
+    brew leaves | while IFS= read -r f; do
+      # Third-party tap formulae appear as `tap/name` in `brew leaves`, but the
+      # Cellar path uses only the basename. Strip everything before the last `/`.
+      short="${f##*/}"
+      for receipt in /opt/homebrew/Cellar/"$short"/*/INSTALL_RECEIPT.json; do
+        [ -e "$receipt" ] || continue
+        on_req=$(python3 -c "import json; print(json.load(open('$receipt')).get('installed_on_request'))" 2>/dev/null)
+        as_dep=$(python3 -c "import json; print(json.load(open('$receipt')).get('installed_as_dependency'))" 2>/dev/null)
+        if [ "$on_req" = "False" ] && [ "$as_dep" = "True" ]; then
+          echo "$f"
+        fi
+        break  # one receipt per formula is enough
+      done
+    done
+  )
 }

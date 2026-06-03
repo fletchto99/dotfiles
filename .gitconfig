@@ -1,13 +1,30 @@
 [core]
   excludesfile = ~/.gitignore_global
+  # FSEvents-based file system monitor — speeds up `git status` 5-10x on large repos.
+  # Requires git 2.37+. Free on macOS; ignored elsewhere if unsupported.
+  fsmonitor = true
   untrackedCache = true
+  # Editor: VS Code Insiders. Works on every platform that has the Insiders build
+  # installed (macOS / Linux / Windows / WSL). The one realistic gap is plain
+  # GitHub Codespaces, where only `code` is in PATH by default; override locally
+  # there with `git config --global core.editor "code --wait"` if needed.
   editor = code-insiders --wait
 
 [user]
   name = Matt Langlois
   email = fletchto99@gmail.com
 
+[init]
+  defaultBranch = main
+
 [commit]
+  gpgsign = true
+  # Show the diff in the commit-message editor so you can sanity-check
+  # what you're committing while writing the message.
+  verbose = true
+
+[tag]
+  # If commits sign, tags should too — they're what releases pin to.
   gpgsign = true
 
 [github]
@@ -19,13 +36,31 @@
 
 [fetch]
   prune = true
+  # Maintain a commit-graph file that speeds up log/blame/walks on large repos.
+  writeCommitGraph = true
 
 [push]
   default = simple
   autoSetupRemote = true
+  # Push annotated tags reachable from pushed commits without needing --tags.
+  followTags = true
 
 [pull]
   rebase = true
+
+[rerere]
+  # Reuse recorded resolution — once you resolve a conflict, git remembers it
+  # and auto-applies the same resolution next time. Big rebase time-saver.
+  enabled = true
+
+[branch]
+  # `git branch` lists most-recently-committed branches first, not alphabetical.
+  sort = -committerdate
+
+[help]
+  # When you typo `git puhs`, git asks "did you mean push?" instead of either
+  # running puhs silently or auto-correcting after a tiny delay.
+  autocorrect = prompt
 
 [color]
   ui = true
@@ -49,25 +84,36 @@
 
 [diff]
   renames = copies
+  # Histogram produces more readable diffs than the default `myers`, especially
+  # for code with lots of structural changes.
+  algorithm = histogram
+  # Color lines that moved (vs. added/deleted) distinctly — huge help when
+  # reviewing refactors.
+  colorMoved = zebra
+  # Treat indentation-only differences as moves rather than separate add/delete.
+  colorMovedWS = allow-indentation-change
   tool = vscode
 
 [difftool]
   prompt = false
 
-[diff "bin"]
-  textconv = hexdump -v -C
-
 [difftool "vscode"]
   cmd = code-insiders --wait --diff $LOCAL $REMOTE
-
-[merge]
-  tool = vscode
 
 [mergetool]
   prompt = false
 
 [mergetool "vscode"]
-  cmd = code-insiders --wait $MERGED
+  # VS Code's native 3-way merge UI (--merge) rather than --diff, which would
+  # only show LOCAL vs REMOTE without letting you edit MERGED.
+  cmd = code-insiders --wait --merge $REMOTE $LOCAL $BASE $MERGED
+
+[merge]
+  # zdiff3 shows the common-ancestor version between ||||||| markers alongside
+  # both sides — makes conflict resolution noticeably faster than the default
+  # `merge` style. Requires git 2.35+.
+  conflictStyle = zdiff3
+  tool = vscode
 
 [alias]
   # Lol for when I forget
@@ -78,9 +124,6 @@
 
   # Patch mode for adding so I don't add random stuff
   addp = add --patch
-
-  # Why doesn't this already exist :(
-  unstage = reset --hard HEAD
 
   # Shortcut to diff tool
   dt = difftool
@@ -111,31 +154,28 @@
   lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
   lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
+# Rewrite GitHub URLs to use SSH everywhere. Covers the `https://` form (so
+# `git clone https://github.com/foo/bar` transparently fetches/pushes over SSH
+# without needing to remember to type the git@ form), and the obsolete `git://`
+# protocol (deprecated by GitHub in 2022; kept here so any old script using it
+# gets auto-redirected to SSH rather than failing with a connection-refused on
+# port 9418).
 [url "git@github.com:"]
-  insteadOf = "gh:"
-  pushInsteadOf = "github:"
-  pushInsteadOf = "git://github.com/"
+  insteadOf = https://github.com/
+  insteadOf = "git://github.com/"
 
-[url "git://github.com/"]
-  insteadOf = "github:"
-
+# Same rewriting for gists.
 [url "git@gist.github.com:"]
-  insteadOf = "gst:"
-  pushInsteadOf = "gist:"
-  pushInsteadOf = "git://gist.github.com/"
-
-[url "git://gist.github.com/"]
-  insteadOf = "gist:"
-
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
+  insteadOf = "git://gist.github.com/"
 
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 
+# Both an https and an ssh variant are needed because `hasconfig:remote.*.url`
+# matches against the URL as stored in .git/config (which is whatever you typed
+# at clone time), not the rewritten form that insteadOf produces at fetch/push
+# time. gitconfig has no boolean-OR syntax for conditional includes, so each
+# stored URL form gets its own stanza pointing at the same file.
 [includeIf "hasconfig:remote.*.url:https://github.com/github/**"]
   path = .gitconfig_work
 

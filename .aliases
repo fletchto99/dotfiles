@@ -1,23 +1,18 @@
-# AFK command
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-
 # Prunes all branches no longer on the origin
 alias delb='git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@") && git pull && git prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -D -v'
 
-# Get week number
-alias week='date +%V'
-
-# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
+# Get macOS Software Updates; update Homebrew + casks, rbenv-managed gems, and global npm packages.
+# Each segment is && so a failure stops the chain rather than leaving a half-updated machine.
+# Notes:
+#   * No `sudo gem ...` — rbenv-managed Rubies should not be touched with sudo, and the system Ruby
+#     should not be modified at all.
+#   * `npm install -g npm@latest` is the supported way to self-update npm in npm 7+.
+alias update='softwareupdate -l && sudo softwareupdate -i -a && brew update && brew upgrade && brew upgrade --cask && brew cleanup && npm install -g npm@latest && npm update -g && gem update --system && gem update && gem cleanup'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
-alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 alias ns="scutil --dns | grep 'nameserver\[[0-9]*\]'"
-
-# Show active network interfaces
-alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 
 # Flush Directory Service cache
 alias flushdns="killall -HUP mDNSResponder"
@@ -25,23 +20,17 @@ alias flushdns="killall -HUP mDNSResponder"
 # Clean up LaunchServices to remove duplicates in the “Open With” menu
 alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
-# macOS has no `md5sum`, so use `md5` as a fallback
-command -v md5sum > /dev/null || alias md5sum="md5"
-
-# macOS has no `sha1sum`, so use `shasum` as a fallback
-command -v sha1sum > /dev/null || alias sha1sum="shasum"
-
-# Empty the Trash on all mounted volumes and the main HDD.
-# Also, clear Apple’s System Logs to improve shell startup speed.
-# Finally, clear download history from quarantine. https://mths.be/bum
-alias cleanup="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
-
-# Merge PDF files
-# Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
-alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
+# Empty the Trash on the boot volume only (NOT /Volumes/* — that would wipe trash on every
+# mounted external/network drive). Also clears Apple's System Logs and the download quarantine
+# history.
+alias cleanup="sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
 
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
+
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
+alias code="code-insiders"

@@ -2,61 +2,91 @@ source ~/.exports
 source ~/.aliases
 source ~/.functions
 
-# Homebrew
-HOMEBREW_NO_ENV_FILTERING="true"
-
-# OH MY ZSH
+# ─── OH MY ZSH ──────────────────────────────────────────────────────────────
 ZSH_THEME="robbyrussell"
-ENABLE_CORRECTION="true"
+# Skip the "did you mean ...?" prompt — slows down typos more than it saves keystrokes.
+ENABLE_CORRECTION="false"
+# Skip compinit's permission audit (compaudit). Faster shell startup; safe given Homebrew
+# prefixes are user-owned on Apple Silicon and we're not on a shared host.
 ZSH_DISABLE_COMPFIX=true
-plugins=(git zsh-autosuggestions)
+# Skip the periodic `git fetch` that OMZ runs against its own repo at shell startup.
+# Run `omz update` manually when you want to update.
+DISABLE_AUTO_UPDATE="true"
+# Skip OMZ's URL-quoting / bracketed-paste magic. Saves a few ms and removes a class of
+# paste-time surprises (auto-escaping URLs, stripping characters from pasted commands).
+DISABLE_MAGIC_FUNCTIONS="true"
+# Only zsh-autosuggestions + zsh-syntax-highlighting. Dropped the OMZ `git`
+# plugin since none of its 30+ git aliases (g/gst/gco/gp/etc.) are in use.
+# `git` itself is unaffected — you still use it normally.
+# IMPORTANT: zsh-syntax-highlighting must be the LAST plugin (it hooks the
+# command-line preexec and gets confused if other plugins load after it).
+plugins=(zsh-autosuggestions zsh-syntax-highlighting)
+
+# Docker CLI completions must enter fpath BEFORE oh-my-zsh runs compinit, otherwise
+# completions for Docker subcommands don't register on first shell.
+if [ -d "$HOME/.docker/completions" ]; then
+  fpath=("$HOME/.docker/completions" $fpath)
+fi
+
 source $ZSH/oh-my-zsh.sh
 
-# Fix for crtl+M when pressing enter
-stty sane
+# ─── ZSH HISTORY & OPTIONS ──────────────────────────────────────────────────
+# Larger history + dedup so Up-arrow / Ctrl-R searches aren't cluttered with duplicates.
+HISTSIZE=100000
+SAVEHIST=100000
+setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_FIND_NO_DUPS HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS HIST_VERIFY SHARE_HISTORY
+# Keep the `history` command itself and one-off function definitions out of history.
+setopt HIST_NO_STORE HIST_NO_FUNCTIONS
 
-# Codespaces we dont want this
+# Type a directory name without `cd` to enter it.
+setopt AUTO_CD
+# Allow `# comments` to be pasted into the interactive prompt without zsh errors.
+setopt INTERACTIVE_COMMENTS
+# Enable zsh power-globbing: ``**/*.rb``, ``^pattern`` negation, ``~exclude``, qualifier flags.
+# Standard zsh feature, often assumed by shell snippets in docs.
+setopt EXTENDED_GLOB
+# After tab-completing, move cursor to the end of the completed word (instead of after the
+# matched prefix). Subtle, but you'll notice the absence after using it for a week.
+setopt ALWAYS_TO_END
+# Disable the terminal bell on completion errors / line-edit boundaries.
+unsetopt BEEP
+
+# Case-insensitive tab completion + partial-word matching. `Down<TAB>` → `Downloads`,
+# `git co<TAB>` matches both ``checkout`` and ``commit``.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# ─── CODESPACES / LINUX SKIPS ───────────────────────────────────────────────
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-  # Add tab completion for many Bash commands
-  if which brew &> /dev/null && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
-    source "$(brew --prefix)/share/bash-completion/bash_completion";
-  elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion;
-  fi;
+  # Cache `brew --prefix` once per shell (the subprocess is ~50ms each call).
+  typeset -gx HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null)}"
 
-
-  # Speed up loading nvm thanks to https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
-  # Add every binary that requires nvm, npm or node to run to an array of node globals
-  NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
+  # ── nvm: lazy-load on first node-ecosystem command ────────────────────────
+  # Original snippet from https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
+  # The find scan of ~/.nvm/versions/node/**/bin is the slow part — cache it.
+  # Force a rebuild after installing a new global with: rm ~/.nvm-node-globals-cache
+  NVM_CACHE="$HOME/.nvm-node-globals-cache"
+  if [[ ! -f "$NVM_CACHE" ]] || [[ $(find "$NVM_CACHE" -mtime +7 2>/dev/null) ]]; then
+    find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' 2>/dev/null \
+      | xargs -n1 basename | sort -u > "$NVM_CACHE"
+  fi
+  NODE_GLOBALS=("${(@f)$(<$NVM_CACHE)}")
   NODE_GLOBALS+=("node")
   NODE_GLOBALS+=("nvm")
 
-  # Lazy-loading nvm + npm on node globals call
-  load_nvm () {
+  load_nvm() {
     export NVM_DIR=~/.nvm
-    [ -s "$(brew --prefix nvm)/nvm.sh" ] && . "$(brew --prefix nvm)/nvm.sh"
+    [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
   }
 
-  # Making node global trigger the lazy loading
   for cmd in "${NODE_GLOBALS[@]}"; do
     eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
   done
 
-  # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-  h=()
-  if [[ -r ~/.ssh/config ]]; then
-    h=($h ${${${(@M)${(f)"$(cat ~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
-  fi
-  if [[ -r ~/.ssh/known_hosts ]]; then
-    h=($h ${${${(f)"$(cat ~/.ssh/known_hosts{,2} || true)"}%%\ *}%%,*}) 2>/dev/null
-  fi
-  if [[ $#h -gt 0 ]]; then
-    zstyle ':completion:*:ssh:*' hosts $h
-    zstyle ':completion:*:slogin:*' hosts $h
-  fi
-
-  eval "$(nodenv init -)"
+  # ── rbenv: lazy-load on first ruby-ecosystem command ──────────────────────
+  # Same pattern as nvm — `rbenv init` is ~50-100ms and most shells don't touch ruby.
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  for cmd in rbenv ruby gem bundle bundler rake irb erb; do
+    eval "${cmd}(){ unset -f rbenv ruby gem bundle bundler rake irb erb; eval \"\$(command rbenv init - zsh)\"; ${cmd} \$@ }"
+  done
 fi
-
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
