@@ -154,20 +154,13 @@
   lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
   lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
-# Rewrite GitHub URLs to use SSH everywhere. Covers the `https://` form (so
-# `git clone https://github.com/foo/bar` transparently fetches/pushes over SSH
-# without needing to remember to type the git@ form), and the obsolete `git://`
-# protocol (deprecated by GitHub in 2022; kept here so any old script using it
-# gets auto-redirected to SSH rather than failing with a connection-refused on
-# port 9418).
-[url "git@github.com:"]
-  insteadOf = https://github.com/
-  insteadOf = "git://github.com/"
-
-# Same rewriting for gists.
-[url "git@gist.github.com:"]
-  insteadOf = "git://gist.github.com/"
-
+# GitHub URL rewriting (HTTPS → SSH, obsolete git:// → SSH) lives in
+# .gitconfig_macos because the SSH key it depends on is provided by 1Password,
+# which only runs on the Mac. On Codespaces / Linux dev boxes there's no SSH
+# key to github.com, so an https→ssh rewrite would break every `git clone
+# https://github.com/...` (the rewritten ssh URL fails with "Host key
+# verification failed"). Those environments use HTTPS + the built-in
+# credential helper instead, so leaving the URL untouched is correct.
 [includeIf "gitdir:/Users/"]
   path = .gitconfig_macos
 

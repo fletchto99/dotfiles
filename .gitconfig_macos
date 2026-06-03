@@ -14,3 +14,22 @@
 
 [credential]
   helper = osxkeychain
+
+# Rewrite GitHub URLs to use SSH. Covers the `https://` form (so
+# `git clone https://github.com/foo/bar` transparently fetches/pushes over SSH
+# without needing to remember to type the git@ form), and the obsolete `git://`
+# protocol (deprecated by GitHub in 2022; kept here so any old script using it
+# gets auto-redirected to SSH rather than failing with a connection-refused on
+# port 9418).
+#
+# Lives in the macOS-only include because the SSH key behind this is held by
+# 1Password — on Codespaces / Linux dev boxes there's no key to github.com, so
+# a global https→ssh rewrite would break every `git clone https://github.com/...`
+# with "Host key verification failed".
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+  insteadOf = "git://github.com/"
+
+# Same rewriting for gists.
+[url "git@gist.github.com:"]
+  insteadOf = "git://gist.github.com/"

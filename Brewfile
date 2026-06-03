@@ -1,6 +1,4 @@
 tap "homebrew/autoupdate"
-tap "homebrew/bundle"
-tap "homebrew/services"
 tap "rfidresearchgroup/proxmark3"
 # NaCl networking and cryptography library
 brew "libsodium"
