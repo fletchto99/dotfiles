@@ -23,6 +23,18 @@
   # what you're committing while writing the message.
   verbose = true
 
+[gpg "ssh"]
+  # Lets `git log --show-signature`, `git verify-commit`, and the %G? log
+  # format actually verify SSH-signed commits locally (without it, every
+  # verification errors out with "allowedSignersFile needs to be configured").
+  # The file maps `email → public key` and is checked into this repo so the
+  # same trust anchor is present on every machine. The actual SIGNING key is
+  # still set per-OS in .gitconfig_{macos,linux,windows} via user.signingkey.
+  #
+  # Public keys only — safe to commit. Add new principals (teammates, work
+  # accounts, etc.) by appending lines to .allowed_signers.
+  allowedSignersFile = ~/.allowed_signers
+
 [tag]
   # If commits sign, tags should too — they're what releases pin to.
   gpgsign = true
