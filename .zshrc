@@ -28,7 +28,34 @@ if [ -d "$HOME/.docker/completions" ]; then
   fpath=("$HOME/.docker/completions" $fpath)
 fi
 
+# ─── COMPINIT FAST PATH ─────────────────────────────────────────────────────
+# OMZ runs `compinit -u -d "$ZSH_COMPDUMP"` (skips compaudit thanks to
+# ZSH_DISABLE_COMPFIX, but still checks every fpath entry for changes on
+# every shell — ~100-300ms). Replace that with the standard once-a-day
+# pattern: do the full check at most once every 24h, otherwise load the
+# cached dump with `-C` (no scan). New completions appear within 24h, or
+# immediately if you `rm ~/.zcompdump` after a brew/npm install that ships
+# completions.
+ZSH_COMPDUMP="$HOME/.zcompdump"
+autoload -Uz compinit
+# Full rebuild if the dump is missing OR older than 24 hours. Otherwise load
+# the cached dump with `-C` (no fpath scan). (#qN.mh+24) is the glob qualifier
+# for "files modified more than 24h ago"; N makes a non-match expand to empty.
+if [[ ! -s $ZSH_COMPDUMP ]] || [[ -n $ZSH_COMPDUMP(#qNmh+24) ]]; then
+  compinit -u -d "$ZSH_COMPDUMP"
+else
+  compinit -C -d "$ZSH_COMPDUMP"
+fi
+# Stub compinit so OMZ's own call is a no-op (it would otherwise re-do the
+# scan we just optimized away).
+compinit() { :; }
+
 source $ZSH/oh-my-zsh.sh
+
+# Restore the real compinit in case a later plugin or interactive session
+# legitimately needs it.
+unfunction compinit
+autoload -Uz compinit
 
 # ─── ZSH HISTORY & OPTIONS ──────────────────────────────────────────────────
 # Larger history + dedup so Up-arrow / Ctrl-R searches aren't cluttered with duplicates.
@@ -58,8 +85,18 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 
 # ─── CODESPACES / LINUX SKIPS ───────────────────────────────────────────────
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
-  # Cache `brew --prefix` once per shell (the subprocess is ~50ms each call).
-  typeset -gx HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null)}"
+  # File-cache `brew --prefix` across shells. `brew` is a Ruby script — even a
+  # single fork is 50-150ms on a warm cache and 1-3s when the page cache is
+  # cold (post-sleep, post-reboot). New iTerm/Terminal tabs are fresh login
+  # shells, so a process-local cache wouldn't help. The prefix is effectively
+  # constant per machine (/opt/homebrew on Apple Silicon, /usr/local on
+  # Intel), so caching to disk is safe; delete the file if you ever migrate.
+  HBP_CACHE="$HOME/.cache/homebrew-prefix"
+  if [[ ! -s "$HBP_CACHE" ]]; then
+    mkdir -p "${HBP_CACHE:h}"
+    brew --prefix 2>/dev/null > "$HBP_CACHE"
+  fi
+  typeset -gx HOMEBREW_PREFIX="$(<$HBP_CACHE)"
 
   # ── nvm: lazy-load on first node-ecosystem command ────────────────────────
   # Original snippet from https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
