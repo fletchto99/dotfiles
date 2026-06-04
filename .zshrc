@@ -28,34 +28,7 @@ if [ -d "$HOME/.docker/completions" ]; then
   fpath=("$HOME/.docker/completions" $fpath)
 fi
 
-# ─── COMPINIT FAST PATH ─────────────────────────────────────────────────────
-# OMZ runs `compinit -u -d "$ZSH_COMPDUMP"` (skips compaudit thanks to
-# ZSH_DISABLE_COMPFIX, but still checks every fpath entry for changes on
-# every shell — ~100-300ms). Replace that with the standard once-a-day
-# pattern: do the full check at most once every 24h, otherwise load the
-# cached dump with `-C` (no scan). New completions appear within 24h, or
-# immediately if you `rm ~/.zcompdump` after a brew/npm install that ships
-# completions.
-ZSH_COMPDUMP="$HOME/.zcompdump"
-autoload -Uz compinit
-# Full rebuild if the dump is missing OR older than 24 hours. Otherwise load
-# the cached dump with `-C` (no fpath scan). (#qN.mh+24) is the glob qualifier
-# for "files modified more than 24h ago"; N makes a non-match expand to empty.
-if [[ ! -s $ZSH_COMPDUMP ]] || [[ -n $ZSH_COMPDUMP(#qNmh+24) ]]; then
-  compinit -u -d "$ZSH_COMPDUMP"
-else
-  compinit -C -d "$ZSH_COMPDUMP"
-fi
-# Stub compinit so OMZ's own call is a no-op (it would otherwise re-do the
-# scan we just optimized away).
-compinit() { :; }
-
 source $ZSH/oh-my-zsh.sh
-
-# Restore the real compinit in case a later plugin or interactive session
-# legitimately needs it.
-unfunction compinit
-autoload -Uz compinit
 
 # ─── ZSH HISTORY & OPTIONS ──────────────────────────────────────────────────
 # Larger history + dedup so Up-arrow / Ctrl-R searches aren't cluttered with duplicates.
