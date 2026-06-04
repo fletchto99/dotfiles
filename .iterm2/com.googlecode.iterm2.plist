@@ -3,27 +3,27 @@
 <plist version="1.0">
 <dict>
 	<key>AIFeatureFunctionCalling</key>
-	<true/>
+	<false/>
 	<key>AIFeatureHostedCodeInterpeter</key>
-	<true/>
+	<false/>
 	<key>AIFeatureHostedFileSearch</key>
-	<true/>
+	<false/>
 	<key>AIFeatureHostedWebSearch</key>
-	<true/>
+	<false/>
 	<key>AIFeatureStreamingResponses</key>
-	<true/>
+	<false/>
 	<key>AITermAPI</key>
-	<integer>2</integer>
+	<integer>0</integer>
 	<key>AIVectorStore</key>
 	<integer>0</integer>
 	<key>AiMaxTokens</key>
-	<integer>400000</integer>
+	<integer>0</integer>
 	<key>AiModel</key>
-	<string>gpt-5.2</string>
+	<string></string>
 	<key>AiResponseMaxTokens</key>
-	<integer>128000</integer>
+	<integer>0</integer>
 	<key>AitermURL</key>
-	<string>https://api.openai.com/v1/responses</string>
+	<string></string>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>Command</key>
@@ -825,11 +825,11 @@
 			<key>Normal Font</key>
 			<string>AndaleMono 12</string>
 			<key>Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
 			<integer>2</integer>
 			<key>Right Option Key Sends</key>
-			<integer>0</integer>
+			<integer>2</integer>
 			<key>Rows</key>
 			<integer>25</integer>
 			<key>Screen</key>
@@ -1112,7 +1112,7 @@
 			<key>Window Type</key>
 			<integer>0</integer>
 			<key>Working Directory</key>
-			<string>/Users/mattlanglois</string>
+			<string>~/</string>
 		</dict>
 	</array>
 	<key>OpenArrangementAtStartup</key>
