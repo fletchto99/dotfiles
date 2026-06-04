@@ -1,0 +1,30 @@
+[user]
+  signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  # 1Password's SSH signing helper. Bootstrap only symlinks this file in if
+  # /opt/1Password/op-ssh-sign exists, so we won't try to sign with a missing
+  # binary on Codespaces / Linux boxes without 1Password.
+  program = "/opt/1Password/op-ssh-sign"
+
+[credential]
+  # In-memory cache with a 1-hour timeout. Avoids re-typing PATs/passwords
+  # every push without ever writing them to disk. For longer-lived storage,
+  # build git-credential-libsecret from git's contrib/ and swap to `libsecret`.
+  helper = cache --timeout=3600
+
+# Rewrite GitHub URLs to use SSH. Safe to enable here because 1Password is
+# providing the github.com SSH key on this machine (otherwise the rewrite would
+# break every `git clone https://github.com/...` with "Host key verification
+# failed"). Duplicated across each OS-specific include rather than extracted
+# to a shared file — keeps each file self-contained so swapping ~/.gitconfig.local
+# between OSes Just Works.
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+  insteadOf = "git://github.com/"
+
+[url "git@gist.github.com:"]
+  insteadOf = "git://gist.github.com/"

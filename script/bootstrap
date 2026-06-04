@@ -201,6 +201,28 @@ link_all_dotfiles() {
     # state (session-state/, plugins/, MCP configs) that's machine-local.
     [ -d ~/.dotfiles/.ssh ] && link_directory_contents ~/.dotfiles/.ssh ~/.ssh
     [ -d ~/.dotfiles/.copilot ] && link_directory_contents ~/.dotfiles/.copilot ~/.copilot
+
+    # Wire up the OS-specific overrides via a per-machine symlink at
+    # ~/.gitconfig.local. The committed .gitconfig has an unconditional
+    # `[include] path = ~/.gitconfig.local`; git silently no-ops on a missing
+    # include, which is exactly what we want on hosts where 1Password isn't
+    # available (e.g. plain Codespaces) — no signing config gets installed,
+    # so git falls back to unsigned commits rather than failing on every push.
+    # Windows is intentionally not handled here — bootstrap is a bash script
+    # built for macOS/Linux; on Windows symlink ~/.gitconfig.local to
+    # ~/.dotfiles/.gitconfig_windows manually (see readme).
+    case "$OSTYPE" in
+        darwin*)
+            safe_link ~/.dotfiles/.gitconfig_macos ~/.gitconfig.local
+            ;;
+        linux-gnu*)
+            if [ -x /opt/1Password/op-ssh-sign ]; then
+                safe_link ~/.dotfiles/.gitconfig_linux ~/.gitconfig.local
+            else
+                echo "[dotfiles] 1Password not detected at /opt/1Password/op-ssh-sign — skipping ~/.gitconfig.local (commits will not be signed)"
+            fi
+            ;;
+    esac
 }
 
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then

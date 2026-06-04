@@ -1,0 +1,28 @@
+[user]
+  signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  # 1Password's SSH signing helper. The path is hardcoded because git config
+  # doesn't expand %LOCALAPPDATA% / environment variables. Forward slashes
+  # work fine for git on Windows and dodge backslash-escaping headaches.
+  # Update the username segment if running as a different Windows user.
+  program = "C:/Users/fletchto99/AppData/Local/1Password/app/8/op-ssh-sign.exe"
+
+[credential]
+  # Git Credential Manager — ships with Git for Windows. Talks to Windows
+  # Credential Manager and handles GitHub / GitLab / Azure DevOps OAuth.
+  helper = manager
+
+# Rewrite GitHub URLs to use SSH. Safe to enable here because 1Password is
+# providing the github.com SSH key on this machine. Duplicated across each
+# OS-specific include rather than extracted to a shared file — keeps each
+# file self-contained so swapping ~/.gitconfig.local between OSes Just Works.
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+  insteadOf = "git://github.com/"
+
+[url "git@gist.github.com:"]
+  insteadOf = "git://gist.github.com/"

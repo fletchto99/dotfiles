@@ -1,8 +1,3 @@
-[core]
-  # Make `git rebase` safer on macOS
-  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-  trustctime = false
-
 [user]
   signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVbk4ZqXm38ztBfkXIucdu7bBvzgUm/zhkFNg+aOAst
 
@@ -22,10 +17,13 @@
 # gets auto-redirected to SSH rather than failing with a connection-refused on
 # port 9418).
 #
-# Lives in the macOS-only include because the SSH key behind this is held by
-# 1Password — on Codespaces / Linux dev boxes there's no key to github.com, so
-# a global https→ssh rewrite would break every `git clone https://github.com/...`
-# with "Host key verification failed".
+# Lives in this Mac-only file because the SSH key behind this is held by
+# 1Password — on hosts without 1Password (e.g. plain Codespaces) there's no
+# key to github.com, so a global https→ssh rewrite would break every
+# `git clone https://github.com/...` with "Host key verification failed".
+# Sibling .gitconfig_linux / .gitconfig_windows files carry the same rewrites
+# for hosts where 1Password IS installed; bootstrap picks the right one by OS
+# and gates Linux on the presence of /opt/1Password/op-ssh-sign.
 [url "git@github.com:"]
   insteadOf = https://github.com/
   insteadOf = "git://github.com/"

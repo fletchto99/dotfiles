@@ -26,6 +26,9 @@
 [tag]
   # If commits sign, tags should too — they're what releases pin to.
   gpgsign = true
+  # Sort tags by version, not alphabetically — 1.10 comes after 1.9, not
+  # after 1.1. Huge readability win for any repo using semver tags.
+  sort = version:refname
 
 [github]
   user = fletchto99
@@ -38,6 +41,12 @@
   prune = true
   # Maintain a commit-graph file that speeds up log/blame/walks on large repos.
   writeCommitGraph = true
+  # Fetch from multiple remotes in parallel (0 = git picks based on CPU count).
+  # Noticeable in repos with origin + upstream + fork.
+  parallel = 0
+  # Skip "(forced update)" detection — speeds up fetches in repos with many
+  # refs at the cost of losing that line from fetch output.
+  showForcedUpdates = false
 
 [push]
   default = simple
@@ -48,19 +57,51 @@
 [pull]
   rebase = true
 
+[rebase]
+  # `fixup!` / `squash!` commits get auto-arranged on `rebase -i`. Pairs with
+  # `git commit --fixup=<sha>` (see the `fixup` alias below) to make pre-PR
+  # cleanup trivial.
+  autoSquash = true
+  # Auto-stash dirty worktree before rebase, pop after. Removes the "you have
+  # unstaged changes, please commit or stash" friction without losing work.
+  autoStash = true
+  # When rebasing a stack of branches, intermediate branches that point at
+  # rebased commits move forward with them. Essential for stacked-PR workflows.
+  # Requires git 2.38+.
+  updateRefs = true
+  # Warn if `rebase -i` is about to drop commits (e.g. accidentally deleted a
+  # `pick` line). `error` would abort entirely, which is too strict.
+  missingCommitsCheck = warn
+
 [rerere]
   # Reuse recorded resolution — once you resolve a conflict, git remembers it
   # and auto-applies the same resolution next time. Big rebase time-saver.
   enabled = true
+  # Also stage the replayed resolution automatically, so the conflict literally
+  # vanishes mid-rebase without a manual `git add`.
+  autoUpdate = true
 
 [branch]
   # `git branch` lists most-recently-committed branches first, not alphabetical.
   sort = -committerdate
 
+[column]
+  # `git branch`, `git tag`, `git stash list` print in columns like ls(1) when
+  # the terminal is wide enough. Big readability upgrade on a wide terminal.
+  ui = auto
+
 [help]
   # When you typo `git puhs`, git asks "did you mean push?" instead of either
   # running puhs silently or auto-correcting after a tiny delay.
   autocorrect = prompt
+
+[log]
+  # ISO dates everywhere — sortable, copy-pasteable, no "Mon Jun 4" prose.
+  date = iso
+
+[grep]
+  # `git grep` prints line numbers by default. Annoying that this is opt-in.
+  lineNumber = true
 
 [color]
   ui = true
@@ -92,6 +133,10 @@
   colorMoved = zebra
   # Treat indentation-only differences as moves rather than separate add/delete.
   colorMovedWS = allow-indentation-change
+  # Replace generic a/ b/ in diff headers with mnemonic prefixes:
+  # i/ (index)  w/ (worktree)  c/ (commit)  o/ (object).
+  # Makes `git diff`, `git diff --cached`, `git diff HEAD` self-labeling.
+  mnemonicPrefix = true
   tool = vscode
 
 [difftool]
@@ -154,15 +199,30 @@
   lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
   lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
-# GitHub URL rewriting (HTTPS → SSH, obsolete git:// → SSH) lives in
-# .gitconfig_macos because the SSH key it depends on is provided by 1Password,
-# which only runs on the Mac. On Codespaces / Linux dev boxes there's no SSH
-# key to github.com, so an https→ssh rewrite would break every `git clone
-# https://github.com/...` (the rewritten ssh URL fails with "Host key
-# verification failed"). Those environments use HTTPS + the built-in
-# credential helper instead, so leaving the URL untouched is correct.
-[includeIf "gitdir:/Users/"]
-  path = .gitconfig_macos
+  # `git fixup <sha>` → creates a fixup! commit targeting <sha>. Then
+  # `git rebase -i <sha>^` auto-arranges it (rebase.autoSquash = true above).
+  fixup = commit --fixup
+
+  # Undo the last commit but keep all changes staged. The "oops, wrong
+  # message / forgot a file" rescue.
+  uncommit = reset --soft HEAD~1
+
+  # Reads better than `git reset HEAD <file>`.
+  unstage = reset HEAD --
+
+# Machine-local include. Populated per-machine by `script/bootstrap`:
+#
+#   - macOS: symlinked to .gitconfig_macos (SSH-signing via 1Password's
+#     op-ssh-sign, osxkeychain credential helper, and https→ssh URL rewriting
+#     for github.com — all of which depend on Mac-only tooling).
+#   - Linux / Codespaces: file is absent, and git silently no-ops on missing
+#     include paths, so the same committed .gitconfig works everywhere without
+#     needing OS detection (which git's includeIf doesn't natively support —
+#     it only knows gitdir, onbranch, and hasconfig conditions, so the
+#     previous `gitdir:/Users/` heuristic both over-matched on Linux boxes
+#     with /Users/ paths and under-matched on macOS clones outside /Users/).
+[include]
+  path = ~/.gitconfig.local
 
 # Both an https and an ssh variant are needed because `hasconfig:remote.*.url`
 # matches against the URL as stored in .git/config (which is whatever you typed

@@ -15,7 +15,7 @@ The bootstrap is **idempotent** — safe to re-run on an already-configured mach
 | File | Purpose |
 |---|---|
 | `.zshrc`, `.exports`, `.aliases`, `.functions` | Shell config split by responsibility |
-| `.gitconfig` + `.gitconfig_macos` + `.gitconfig_work` | Base git config + conditionally-included macOS-specific and work-specific overrides |
+| `.gitconfig` + `.gitconfig_{macos,linux,windows}` + `.gitconfig_work` | Base git config + per-OS overrides (1Password SSH signing, credential helper, URL rewrites) wired in via a `~/.gitconfig.local` symlink, plus a work-account override loaded by remote URL |
 | `.gitignore_global`, `.inputrc` | Global git ignores + readline (REPL) configuration |
 | `.ssh/config*` | Hostname aliases and routing (private keys are NOT versioned — see `.gitignore`) |
 | `.copilot/copilot-instructions.md` | Per-user GitHub Copilot CLI preferences |
@@ -54,7 +54,29 @@ Both are cloned into `${ZSH_CUSTOM}/plugins/` by the bootstrap (idempotent — o
 
 ### Git commit signing: SSH via 1Password
 
-Commits sign via `op-ssh-sign` (1Password's SSH agent), not GPG. Configuration lives in `.gitconfig_macos` and loads conditionally via `[includeIf "gitdir:/Users/"]` — keeps macOS-specific paths (`/Applications/1Password.app/...`, `osxkeychain` credential helper) out of the always-loaded `.gitconfig` so the same dotfiles work cleanly on Linux/Codespaces too.
+Commits sign via `op-ssh-sign` (1Password's SSH agent), not GPG. The same SSH key is used on every OS — only the path to `op-ssh-sign` and the credential helper differ. Per-OS settings live in three sibling files:
+
+| File | 1Password path | Credential helper |
+|---|---|---|
+| `.gitconfig_macos` | `/Applications/1Password.app/Contents/MacOS/op-ssh-sign` | `osxkeychain` |
+| `.gitconfig_linux` | `/opt/1Password/op-ssh-sign` | `cache --timeout=3600` |
+| `.gitconfig_windows` | `C:/Users/<user>/AppData/Local/1Password/app/8/op-ssh-sign.exe` | `manager` (Git Credential Manager) |
+
+Each file is self-contained — including the GitHub `https://` → `git@` URL rewrites — so swapping the active one is a single symlink change.
+
+**How it gets loaded.** The committed `.gitconfig` has one unconditional line: `[include] path = ~/.gitconfig.local`. Git silently no-ops on a missing include, so the same `.gitconfig` works everywhere — including for repos cloned outside `~/`, which the old `[includeIf "gitdir:/Users/"]` heuristic missed and broke commit signing in `/tmp/` and similar.
+
+- **macOS**: `script/bootstrap` symlinks `~/.gitconfig.local` → `~/.dotfiles/.gitconfig_macos` automatically.
+- **Linux**: bootstrap symlinks `→ .gitconfig_linux` **only if** `/opt/1Password/op-ssh-sign` exists. On Codespaces / Linux boxes without 1Password, no symlink is created and commits stay unsigned (the desired behavior — signing would otherwise fail on every push).
+- **Windows**: bootstrap doesn't run on Windows (bash script, Homebrew/apt assumptions). Wire it up manually in Git Bash / WSL:
+  ```bash
+  ln -s ~/.dotfiles/.gitconfig_windows ~/.gitconfig.local
+  ```
+  Or, from PowerShell:
+  ```powershell
+  New-Item -ItemType SymbolicLink -Path "$HOME\.gitconfig.local" -Target "$HOME\.dotfiles\.gitconfig_windows"
+  ```
+  Edit `.gitconfig_windows` if your Windows username isn't `fletchto99` — `%LOCALAPPDATA%` doesn't expand inside git config, so the path is hardcoded.
 
 ### Git config additions worth highlighting
 
