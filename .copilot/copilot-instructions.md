@@ -127,3 +127,9 @@ fully pushed (no commits missing from a remote); skip anything still in
 active use. Merged/closed-PR working trees and stale base clones on
 `main`/`master` are safe to reclaim — they can be re-created from the
 remote when needed.
+
+**Never auto-remove security-advisory / GHSA-fork clones** (e.g. a
+secure-coding patch series pushed to a private `ghsa-*` fork). They have
+no public PR by design and may sit untouched for weeks while an advisory
+is in progress — "no PR" and "stale >1 week" do NOT imply abandoned. Only
+remove one on explicit instruction.
