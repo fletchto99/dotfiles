@@ -102,3 +102,28 @@ long-running background-agent tasks that shouldn't share an object store
 — e.g. aggressive `gc`, history rewrites, or an autonomous agent doing
 heavy git surgery. Worktrees share one `.git`, so destructive operations
 in one affect them all.
+
+### Clean up review worktrees after posting
+
+When I spin up a worktree **solely to review a PR** (not to make
+changes), tear it down once the review is posted:
+
+- After the review is submitted (COMMENT / REQUEST_CHANGES / APPROVE),
+  `git worktree remove <path>` the worktree I created for that review
+  (and delete the throwaway `pr-<N>` branch if I created one).
+- Only remove a worktree **I created for the review**, and only if it's
+  clean (no uncommitted changes). Never remove a worktree where edits
+  were made, or one that already existed.
+- Skip removal on a `dry-run` review, or if the review wasn't actually
+  posted.
+- Leave the main clone and any feature-work worktrees intact.
+
+### Periodic cleanup of stale worktrees / clones
+
+Treat a worktree or clone as a cleanup candidate once its PR has merged
+or closed, or it hasn't been touched in over a week. Before removing,
+confirm it's clean (no uncommitted changes ignoring stray artifacts) and
+fully pushed (no commits missing from a remote); skip anything still in
+active use. Merged/closed-PR working trees and stale base clones on
+`main`/`master` are safe to reclaim — they can be re-created from the
+remote when needed.
