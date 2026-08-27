@@ -1,13 +1,13 @@
 # Prunes all branches no longer on the origin
 alias delb='git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@") && git pull && git prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -D -v'
 
-# Get macOS Software Updates; update Homebrew + casks, rbenv-managed gems, and global npm packages.
+# Get macOS Software Updates; update Homebrew + casks, global npm packages, and uv-managed Python.
 # Each segment is && so a failure stops the chain rather than leaving a half-updated machine.
 # Notes:
-#   * No `sudo gem ...` — rbenv-managed Rubies should not be touched with sudo, and the system Ruby
-#     should not be modified at all.
+#   * No gem updates — Ruby projects pin everything via Gemfile.lock, and a blanket
+#     `gem update` just pollutes the shared rbenv gem home with unpinned versions.
 #   * `npm install -g npm@latest` is the supported way to self-update npm in npm 7+.
-alias update='softwareupdate -l && sudo softwareupdate -i -a && brew update && brew upgrade && brew upgrade --cask && brew cleanup && npm install -g npm@latest && npm update -g && gem update --system && gem update && gem cleanup'
+alias update='softwareupdate -l && sudo softwareupdate -i -a && brew update && brew upgrade && brew upgrade --cask && brew cleanup && npm install -g npm@latest && npm update -g && uv python upgrade && uv tool upgrade --all'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
