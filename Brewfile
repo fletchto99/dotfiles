@@ -10,8 +10,6 @@ brew "zstd"
 brew "azure-cli"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
-# Container Signing
-brew "cosign"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -40,8 +38,6 @@ brew "nvm"
 brew "openssh"
 # Package compiler and linker metadata toolkit
 brew "pkgconf"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.13"
 # Ruby version manager
 brew "rbenv"
 # Extremely fast Python package installer and resolver, written in Rust
