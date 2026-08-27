@@ -44,10 +44,6 @@
 
 [github]
   user = fletchto99
-  shelluser = matt
-
-[protocol]
-  version = 2
 
 [fetch]
   prune = true
@@ -56,12 +52,8 @@
   # Fetch from multiple remotes in parallel (0 = git picks based on CPU count).
   # Noticeable in repos with origin + upstream + fork.
   parallel = 0
-  # Skip "(forced update)" detection — speeds up fetches in repos with many
-  # refs at the cost of losing that line from fetch output.
-  showForcedUpdates = false
 
 [push]
-  default = simple
   autoSetupRemote = true
   # Push annotated tags reachable from pushed commits without needing --tags.
   followTags = true
@@ -115,9 +107,6 @@
   # `git grep` prints line numbers by default. Annoying that this is opt-in.
   lineNumber = true
 
-[color]
-  ui = true
-
 [color "branch"]
   current = magenta
   remote = cyan
@@ -155,7 +144,7 @@
   prompt = false
 
 [difftool "vscode"]
-  cmd = code-insiders --wait --diff $LOCAL $REMOTE
+  cmd = code-insiders --wait --diff \"$LOCAL\" \"$REMOTE\"
 
 [mergetool]
   prompt = false
@@ -163,7 +152,7 @@
 [mergetool "vscode"]
   # VS Code's native 3-way merge UI (--merge) rather than --diff, which would
   # only show LOCAL vs REMOTE without letting you edit MERGED.
-  cmd = code-insiders --wait --merge $REMOTE $LOCAL $BASE $MERGED
+  cmd = code-insiders --wait --merge \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\"
 
 [merge]
   # zdiff3 shows the common-ancestor version between ||||||| markers alongside
@@ -171,6 +160,9 @@
   # `merge` style. Requires git 2.35+.
   conflictStyle = zdiff3
   tool = vscode
+  # Auto-stash dirty worktree before merge/pull, pop after — same friction
+  # remover as rebase.autoStash above.
+  autoStash = true
 
 [alias]
   # Lol for when I forget

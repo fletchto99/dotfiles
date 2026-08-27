@@ -90,13 +90,17 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
   }
 
   for cmd in "${NODE_GLOBALS[@]}"; do
-    eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
+    eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \"\$@\" }"
   done
 
-  # ── rbenv: lazy-load on first ruby-ecosystem command ──────────────────────
-  # Same pattern as nvm — `rbenv init` is ~50-100ms and most shells don't touch ruby.
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  for cmd in rbenv ruby gem bundle bundler rake irb erb; do
-    eval "${cmd}(){ unset -f rbenv ruby gem bundle bundler rake irb erb; eval \"\$(command rbenv init - zsh)\"; ${cmd} \$@ }"
-  done
+  # ── rbenv: lazy shell integration ──────────────────────────────────────────
+  # ~/.rbenv/shims is on PATH via ~/.exports, so ruby/gem/bundle/etc. already
+  # resolve the right version per project — no wrappers needed. This single
+  # wrapper defers `rbenv init` (~50-100ms) until rbenv itself is invoked,
+  # which is only needed for shell integration (`rbenv shell`, rehash hooks).
+  rbenv() {
+    unset -f rbenv
+    eval "$(command rbenv init - zsh)"
+    rbenv "$@"
+  }
 fi
