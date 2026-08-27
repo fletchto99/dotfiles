@@ -126,6 +126,10 @@ reply before the fix is actually pushed.
   symlinks into the `~/.dotfiles` git repo. Edit through the symlinks
   freely, but remind me to review/commit the dotfiles repo after config
   changes — don't commit it autonomously.
+- **VS Code**: "open in VS Code" means **VS Code Insiders** — use the
+  `code-insiders` CLI (the only one on PATH; there is no stable `code`
+  CLI, and the interactive-only `code` shell alias isn't visible to
+  agents).
 - **Ruby**: managed by rbenv (Homebrew, `/opt/homebrew/bin/rbenv`).
   `~/.rbenv/shims` is on PATH via `~/.exports`, so `ruby`/`bundle`/`rails`
   resolve the repo's `.ruby-version` automatically — no `rbenv init`
