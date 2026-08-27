@@ -47,6 +47,13 @@ PRs in parallel), prefer `git worktree` over a second full clone:
   `git worktree remove ../../worktrees/<repo>--<branch>` (and `git worktree prune`).
   After removing a worktree, also `git branch -D` its now-orphaned local
   branch (unless it still has unmerged/unpushed work).
+- **Prune gone branches** during base-clone cleanup: delete local branches
+  whose upstream was deleted on the remote (merged PRs), as long as no
+  worktree still has them checked out:
+
+  ```bash
+  git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
+  ```
 - **Fetch before branching**: run `git fetch origin` in the base clone
   before creating a worktree off `origin/main` — base clones can sit
   days behind.
