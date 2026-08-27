@@ -47,6 +47,12 @@ PRs in parallel), prefer `git worktree` over a second full clone:
   `git worktree remove ../../worktrees/<repo>--<branch>` (and `git worktree prune`).
   After removing a worktree, also `git branch -D` its now-orphaned local
   branch (unless it still has unmerged/unpushed work).
+- **Clean up docker containers with the worktree**: if the worktree ran
+  its own `docker compose` services (check
+  `docker ps -a --format '{{.Names}}'` for the compose project name,
+  e.g. `<repo>--<branch>-db-1`), remove them when removing the worktree
+  — but never remove a running container another worktree is using
+  (e.g. the one shared DB serving port 3306).
 - **Prune gone branches** during base-clone cleanup: delete local branches
   whose upstream was deleted on the remote (merged PRs), as long as no
   worktree still has them checked out:
