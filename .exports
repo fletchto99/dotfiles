@@ -25,3 +25,9 @@ export PATH="$HOME/.rbenv/shims:/opt/homebrew/bin:$PATH"
 
 # Oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
+
+# Since ~2025 `brew upgrade` attempts casks with `auto_updates true` (Chrome,
+# Slack, etc.) by default — pointless churn since those apps self-update and
+# brew's recorded cask version is perpetually stale. Restore the old behavior;
+# use `brew upgrade --cask --greedy <cask>` to force one when actually wanted.
+export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1
