@@ -30,6 +30,10 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
+# uv completions (must come after compinit, which oh-my-zsh runs). uv is a
+# static Rust binary — this is ~2ms, no lazy-loading needed.
+command -v uv >/dev/null && eval "$(uv generate-shell-completion zsh)"
+
 # ─── ZSH HISTORY & OPTIONS ──────────────────────────────────────────────────
 # Larger history + dedup so Up-arrow / Ctrl-R searches aren't cluttered with duplicates.
 HISTSIZE=100000

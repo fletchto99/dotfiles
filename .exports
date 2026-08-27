@@ -20,8 +20,9 @@ export LC_ALL='en_US.UTF-8';
 # PATH, highest priority first: rbenv shims (version dispatch works without
 # `rbenv init`, and living in .exports makes ruby/bundle resolve correctly in
 # non-interactive shells, e.g. the Copilot CLI bash tool; shell integration is
-# still lazy-loaded in .zshrc), then Homebrew.
-export PATH="$HOME/.rbenv/shims:/opt/homebrew/bin:$PATH"
+# still lazy-loaded in .zshrc), then ~/.local/bin (uv-installed tools), then
+# Homebrew.
+export PATH="$HOME/.rbenv/shims:$HOME/.local/bin:/opt/homebrew/bin:$PATH"
 
 # Oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
