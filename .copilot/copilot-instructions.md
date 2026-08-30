@@ -26,10 +26,12 @@ is configured through an unconditional `[include] path = ~/.gitconfig.local`
 any path on this machine — the location rule is organizational, not a
 signing requirement.
 
-## Worktrees for multi-branch / multi-PR work
+## Worktrees for all branch work
 
-When working on more than one branch of the same repo at once (e.g. two
-PRs in parallel), prefer `git worktree` over a second full clone:
+**Base clones stay on the default branch (main/master) at all times.**
+Never create feature branches or commit work directly in a base clone —
+even for a single-branch task. All branch/feature work happens in a
+worktree:
 
 - Keep one main clone at
   `/Users/fletchto99/Programming/copilot-repos/base-clones/<repo>/`.
@@ -39,7 +41,7 @@ PRs in parallel), prefer `git worktree` over a second full clone:
   ```bash
   # existing branch (run from the base clone)
   git worktree add ../../worktrees/<repo>--<branch> <branch>
-  # new branch off main
+  # new branch off the default branch (check: main vs master)
   git worktree add -b <newbranch> ../../worktrees/<repo>--<newbranch> origin/main
   ```
 
